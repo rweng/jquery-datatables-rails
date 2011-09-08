@@ -4,5 +4,5 @@ h1. Install and Usage
 
 First, put the gem in your Gemfile (@gem 'jquery-datatables-rails' , :git => 'git://github.com/rweng/jquery-datatables-rails.git'@) and run @bundle install@
 
-After installing it you can require it in your _application.js_ file with @\\= require jquery.dataTables@, or use the images and stylesheets in the _dataTables_ directory: @<%= image_tag 'dataTables/sortBoth.png' %>@
+After installing it you can require it in your _application.js_ file with @//= require jquery.dataTables@, or use the images and stylesheets in the _dataTables_ directory: @<%= image_tag 'dataTables/sortBoth.png' %>@
 
