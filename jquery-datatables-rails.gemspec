@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Jquery::Datatables::Rails::VERSION
   s.authors     = ["Robin Wenglewski"]
   s.email       = ["robin@wenglewski.de"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/rweng/jquery-datatables-rails"
   s.summary     = %q{jquery datatables for rails}
   s.description = %q{}
 
