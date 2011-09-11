@@ -206,7 +206,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
                         "columnId": columnId,
                         "columnName": sColumnName
                     };
-                    $.extend(ret_hash, oCustomSubmitData);
+                    $.extend(ret_hash, properties.oCustomSubmitData);
                     return ret_hash;
                 },
                 "onerror": function () {
