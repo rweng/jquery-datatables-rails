@@ -199,13 +199,15 @@ returns true if plugin should continue with sending AJAX request, false will abo
                     var sColumnName = oTable.fnSettings().aoColumns[columnId].sName;
                     if (sColumnName == null || sColumnName == "")
                         sColumnName = oTable.fnSettings().aoColumns[columnId].sTitle;
-                    return {
+                    var ret_hash = {
                         "id": id,
                         "rowId": rowId,
                         "columnPosition": columnPosition,
                         "columnId": columnId,
                         "columnName": sColumnName
                     };
+                    $.extend(ret_hash, oCustomSubmitData);
+                    return ret_hash;
                 },
                 "onerror": function () {
                     properties.fnEndProcessingMode();
@@ -637,8 +639,8 @@ returns true if plugin should continue with sending AJAX request, false will abo
             aoTableActions: null,
             fnOnBeforeAction: _fnOnBeforeAction,
             bUseFormsPlugin: false,
-            fnOnActionCompleted: _fnOnActionCompleted
-
+            fnOnActionCompleted: _fnOnActionCompleted,
+            oCustomSubmitData
 
         };
 
