@@ -36,9 +36,3 @@ $.fn.dataTableExt.oApi.fnReloadAjax = function ( oSettings, sNewSource, fnCallba
 		}
 	}, oSettings );
 }
-
-/* Example call to load a new file */
-oTable.fnReloadAjax( 'media/examples_support/json_source2.txt' );
-
-/* Example call to reload from original file */
-oTable.fnReloadAjax();
