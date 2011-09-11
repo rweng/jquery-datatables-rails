@@ -640,7 +640,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
             fnOnBeforeAction: _fnOnBeforeAction,
             bUseFormsPlugin: false,
             fnOnActionCompleted: _fnOnActionCompleted,
-            oCustomSubmitData
+            oCustomSubmitData: null
 
         };
 
