@@ -7,7 +7,7 @@ First, put the gem in your Gemfile (`gem 'jquery-datatables-rails'`) and run `bu
 After installing it you can require it in your _application.js_ file with `\\= require jquery.dataTables.min`.
 Also, add the css to your application.html.erb:
 
-    <%= stylesheet_link_tag    "/assets/dataTables/jquery.dataTables.css", :media => "all" %>
+    <%= stylesheet_link_tag    "/assets/dataTables/css/jquery.dataTables.css", :media => "all" %>
 
 However, if you use the stylesheets include them separately and not compiled in the application.css.
 This is because images in the stylesheets are referenced to without a path. So if you include the stylesheet `dataTables/demo_table_jui` it works, because the images are also under `dataTables`. But if you include the stylesheet in the application.css, it won't work.
