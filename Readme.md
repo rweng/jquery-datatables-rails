@@ -1,18 +1,20 @@
-This is a gem for Rails >= 3.1 applications. It provides all the basic DataTables files, but not (yet) the extras.
+# jquery-datatables-rails
 
-# Install and Usage
+This gem packages the jQuery [DataTables](http://datatables.net/) plugin for easy use with the Rails 3.1+ asset pipleine.
 
-First, put the gem in your Gemfile (`gem 'jquery-datatables-rails'`) and run `bundle install`
+It provides all the basic DataTables files, but not (yet) the extras.
 
-After installing it you can require it in your asset manifests. In _application.js_:
+## Installation
 
-`//= require dataTables/jquery.dataTables`
+1. Add `gem 'jquery-datatables-rails'` to the assets group in your Gemfile and run `bundle install`.
+1. Add the JavaScript to application.js:
 
-And in _application.css_:
+    `//= require dataTables/jquery.dataTables`
+1. Add the stylesheets to application.css:
 
-`*= require dataTables/jquery.dataTables`
+    `*= require dataTables/jquery.dataTables`
 
-# Plugins
+## Plugins
 
 Right now, the only plugin that is available is fnReloadAjax. Check out the [assets directory][assets].
 
