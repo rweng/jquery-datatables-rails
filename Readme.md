@@ -44,6 +44,6 @@ $('.datatable').dataTable({
 
 ## Plugins
 
-Right now, the only plugin that is available is fnReloadAjax. Check out the [assets directory][assets].
+Right now, the only plugin that are available are api.fnReloadAjax, sorting.numbersHtml and typeDetection.numberHtml. Check out the [assets directory][assets].
 
 [assets]: https://github.com/rweng/jquery-datatables-rails/tree/master/vendor/assets/javascripts
