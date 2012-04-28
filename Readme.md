@@ -47,11 +47,11 @@ $('.datatable').dataTable({
 Only a few plugins are currently available
 
 * api
-** fnReloadAjax
+  * fnReloadAjax
 * sorting
-** numbersHtml
+  * numbersHtml
 * typeDetection
-** numberHtml
+  * numberHtml
 
 Check out the [assets directory][assets].
 
