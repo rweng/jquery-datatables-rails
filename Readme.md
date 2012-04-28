@@ -44,6 +44,31 @@ $('.datatable').dataTable({
 
 ## Plugins
 
-Right now, the only plugin that are available are api.fnReloadAjax, sorting.numbersHtml and typeDetection.numberHtml. Check out the [assets directory][assets].
+Only a few plugins are currently available
+
+* api
+** fnReloadAjax
+* sorting
+** numbersHtml
+* typeDetection
+** numberHtml
+
+Check out the [assets directory][assets].
+
+## Extras
+
+Only a few extras are currently available:
+
+* FixedColumns
+* FixedHeader
+
+To add an extra into your application, include it like follow:
+
+`//= require dataTables/extras/[ExtraName]`
+
+Make sure to also add it's initialization as described on [datatables extras' site][datatables_extras]
+
 
 [assets]: https://github.com/rweng/jquery-datatables-rails/tree/master/vendor/assets/javascripts
+[extras]: https://github.com/rweng/jquery-datatables-rails/tree/master/vendor/assets/javascripts/dataTables/extras
+[datatables_extras]: http://datatables.net/extras/
