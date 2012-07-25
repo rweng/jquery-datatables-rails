@@ -66,10 +66,16 @@ These files can be found in the [assets directory][assets].
 
 ## Extras
 
-Only a few extras are currently available:
+Only the official extras are available:
 
+* AutoFill
+* ColReorder
+* ColVis
 * FixedColumns
 * FixedHeader
+* KeyTable
+* Scroller
+* TableTools
 
 To add an extra into your application, include it like follow:
 
