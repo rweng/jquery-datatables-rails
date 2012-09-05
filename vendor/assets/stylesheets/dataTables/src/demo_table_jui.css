@@ -55,6 +55,7 @@
 
 .dataTables_wrapper .ui-toolbar {
 	padding: 5px;
+    margin: 0 auto;
 }
 
 .dataTables_paginate {
@@ -108,6 +109,7 @@ table.display thead th div.DataTables_sort_wrapper span {
  * DataTables features
  */
 
+/* Wrapper only effects the Header and Footer content, not the results in the DataTable */
 .dataTables_wrapper {
 	position: relative;
 	clear: both;
@@ -126,25 +128,31 @@ table.display thead th div.DataTables_sort_wrapper span {
 	padding: 2px 0;
 }
 
+/* Length is the dropdown which selects the number of items to return */
 .dataTables_length {
 	width: 40%;
 	float: left;
 }
 
+/* Filter is the Search Field  */
 .dataTables_filter {
 	width: 50%;
 	float: right;
 	text-align: right;
+    padding: 3px;
 }
 
+/* Info is the footer which displays the number of results displaying out of the total number of results  */
 .dataTables_info {
 	width: 50%;
 	float: left;
 }
 
+/* Paginate is the footer which lists the pages */
 .dataTables_paginate {
 	float: right;
 	text-align: right;
+    padding: 3px;
 }
 
 /* Pagination nested */
@@ -156,19 +164,19 @@ table.display thead th div.DataTables_sort_wrapper span {
 }
 
 .paginate_disabled_previous {
-	background-image: url('../images/back_disabled.jpg');
+	background-image: url('/assets/dataTables/back_disabled.jpg');
 }
 
 .paginate_enabled_previous {
-	background-image: url('../images/back_enabled.jpg');
+	background-image: url('/assets/dataTables/back_enabled.jpg');
 }
 
 .paginate_disabled_next {
-	background-image: url('../images/forward_disabled.jpg');
+	background-image: url('/assets/dataTables/forward_disabled.jpg');
 }
 
 .paginate_enabled_next {
-	background-image: url('../images/forward_enabled.jpg');
+	background-image: url('/assets/dataTables/forward_enabled.jpg');
 }
 
 
@@ -208,23 +216,23 @@ table.display td.center {
  */
 
 .sorting_asc {
-	background: url('../images/sort_asc.png') no-repeat center right;
+	background: url('/assets/dataTables/sort_asc.png') no-repeat center right;
 }
 
 .sorting_desc {
-	background: url('../images/sort_desc.png') no-repeat center right;
+	background: url('/assets/dataTables/sort_desc.png') no-repeat center right;
 }
 
 .sorting {
-	background: url('../images/sort_both.png') no-repeat center right;
+	background: url('/assets/dataTables/sort_both.png') no-repeat center right;
 }
 
 .sorting_asc_disabled {
-	background: url('../images/sort_asc_disabled.png') no-repeat center right;
+	background: url('/assets/dataTables/sort_asc_disabled.png') no-repeat center right;
 }
 
 .sorting_desc_disabled {
-	background: url('../images/sort_desc_disabled.png') no-repeat center right;
+	background: url('/assets/dataTables/sort_desc_disabled.png') no-repeat center right;
 }
 
 
