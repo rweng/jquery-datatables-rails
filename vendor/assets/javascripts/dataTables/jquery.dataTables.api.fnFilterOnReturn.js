@@ -1,6 +1,6 @@
 jQuery.fn.dataTableExt.oApi.fnFilterOnReturn = function (oSettings) {
     var _that = this;
-  
+
     this.each(function (i) {
         $.fn.dataTableExt.iApiIndex = i;
         var $this = this;
