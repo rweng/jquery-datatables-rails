@@ -1,3 +1,7 @@
+# Important
+
+The current gem is released without updated plugins. If you encounter any errors, please fork the repository, update the plugin files and send a pull-request.
+
 # jquery-datatables-rails
 
 This gem packages the jQuery [DataTables](http://datatables.net/) plugin for easy use with the Rails 3.1+ asset pipleine.
