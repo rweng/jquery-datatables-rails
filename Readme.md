@@ -83,11 +83,20 @@ Only the official extras are available:
 * Scroller
 * TableTools
 
-To add an extra into your application, include it like follow:
+To add an extra into your application, add its JS file to `application.js` using the following pattern:
 
     //= require dataTables/extras/[ExtraName]
 
+Additionally, you may need to add any associated CSS files. For instance the TableTools extra requires
+you to add the following two lines to your `application.css` file:
+
+    *= require dataTables/extras/TableTools
+    *= require dataTables/extras/TableTools_JUI
+
 Make sure to also add it's initialization as described on [datatables extras' site][datatables_extras]
+
+
+
 
 
 [assets]: https://github.com/rweng/jquery-datatables-rails/tree/master/vendor/assets/javascripts/dataTables
