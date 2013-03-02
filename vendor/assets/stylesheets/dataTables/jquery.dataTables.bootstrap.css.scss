@@ -44,3 +44,8 @@ table.dataTable thead .sorting_desc_disabled { background: image-url('dataTables
 table.dataTable th:active {
 	outline: none;
 }
+
+/* fixes for TableTools */
+.DTTT_dropdown {z-index: 2002;}
+
+.DTTT_dropdown li {position: relative;}
