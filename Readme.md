@@ -12,30 +12,30 @@ It provides all the basic DataTables files, and a few of the extras.
 
 1. Add to your Gemfile:
 
-    `gem 'jquery-datatables-rails'`
+        gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
 
 1. Install the gem:
 
-    `bundle install`
+        bundle install
 
 1. Add the JavaScript to `application.js`:
 
-    `//= require dataTables/jquery.dataTables`
+        //= require dataTables/jquery.dataTables
 
 1. Add the stylesheets to `application.css`:
 
-    `*= require dataTables/jquery.dataTables`
+        *= require dataTables/jquery.dataTables
 
 ## Twitter Bootstrap 2 Installation
 
 1. Complete steps 1-3 of the General Installation
 1. Add some more JavaScript to `application.js`:
 
-    `//= require dataTables/jquery.dataTables.bootstrap`
+        //= require dataTables/jquery.dataTables.bootstrap
 
 1. Add this (and only this) stylesheet to `application.css`:
 
-    `*= require dataTables/jquery.dataTables.bootstrap`
+        *= require dataTables/jquery.dataTables.bootstrap
 
 1. Initialize your datatables using one of these options:
 
