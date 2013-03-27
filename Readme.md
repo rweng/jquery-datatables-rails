@@ -10,7 +10,7 @@ It provides all the basic DataTables files, and a few of the extras.
 
 ## General Installation
 
-1. Add to the assets group in your Gemfile:
+1. Add to your Gemfile:
 
     `gem 'jquery-datatables-rails'`
 
