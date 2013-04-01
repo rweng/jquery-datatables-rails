@@ -16,6 +16,11 @@ table.dataTable thead th {
 	*cursor: hand;
 }
 
+table.dataTable thead th.sorting_disabled {
+	cursor: default;
+  *cursor: default;
+}
+
 table.dataTable tfoot th {
 	padding: 3px 18px 3px 10px;
 	border-top: 1px solid black;
@@ -170,6 +175,12 @@ table.dataTable tr.even td.sorting_3 { background-color: #F9F9FF; }
 	background-color: #99B3FF;
 }
 
+.pagination ul > .disabled > a,
+.pagination ul > .disabled > a:hover,
+.pagination ul > .disabled > a:focus {
+  cursor: default;
+  *cursor: default;
+}
 
 /*
  * Processing indicator
