@@ -101,7 +101,7 @@ $.extend( $.fn.dataTableExt.oPagination, {
           fnDraw(oSettings);
         }
       };
-      
+      if (Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength) > 1) {
         $(nPaging).addClass('pagination').append(
                 '<ul>' +
 						    '<li class="first disabled"><a href="#">' + oLang.sFirst + '</a></li>' +
@@ -115,7 +115,7 @@ $.extend( $.fn.dataTableExt.oPagination, {
 	      $(els[1]).bind('click.DT', { action: "previous" }, fnClickHandler);
 	      $(els[2]).bind('click.DT', { action: "next" }, fnClickHandler);
 	      $(els[3]).bind('click.DT', { action: "last" }, fnClickHandler);
-      
+      }
     },
  
     "fnUpdate": function (oSettings, fnDraw) {
