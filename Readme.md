@@ -54,6 +54,21 @@ $('.datatable').dataTable({
 });
 ```
 
+```javascript
+// Add Languaje example
+$(document).ready(function() {
+        $('.datatable').dataTable( {
+            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+            "sPaginationType": "bootstrap",
+            "oLanguage": {
+                "sUrl": "http://localhost:3000/dataTables.spanish.txt"
+                //File in directory  public/  
+            }
+        } );
+});
+```
+
+
 ## Plugins
 
 Only a few plugins are currently available
