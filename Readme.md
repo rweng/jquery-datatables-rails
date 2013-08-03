@@ -120,7 +120,6 @@ Make sure to also add it's initialization as described on [datatables extras' si
 
   people.js.coffee
 
-    ```javascript
       jQuery ->
         responsiveHelper = undefined
         breakpointDefinition =
@@ -150,7 +149,6 @@ Make sure to also add it's initialization as described on [datatables extras' si
 
           fnDrawCallback: (oSettings) ->
             responsiveHelper.respond()
-    ```
 
   people/index.html.haml
 
