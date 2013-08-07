@@ -72,7 +72,7 @@ These files can be found in the [assets directory][assets].
 
 ## Extras
 
-Only the official extras are available:
+Official extras are available:
 
 * AutoFill
 * ColReorder
@@ -82,6 +82,9 @@ Only the official extras are available:
 * KeyTable
 * Scroller
 * TableTools
+
+Unofficial extra
+* datatables.responsive.js [https://github.com/Comanche/datatables-responsive]
 
 To add an extra into your application, add its JS file to `application.js` using the following pattern:
 
@@ -95,9 +98,69 @@ you to add the following two lines to your `application.css` file:
 
 Make sure to also add it's initialization as described on [datatables extras' site][datatables_extras]
 
-
-
-
-
 [assets]: https://github.com/rweng/jquery-datatables-rails/tree/master/vendor/assets/javascripts/dataTables
 [datatables_extras]: http://datatables.net/extras/
+
+### datatables.responsive.js
+
+  Gemfile
+
+    # Dependency:
+    gem 'lodash-rails' 
+
+  application.js
+
+    //= require dataTables/extras/datatables.responsive
+
+  application.css
+
+    *= require dataTables/extras/datatables.responsive
+
+  Example:
+
+  people.js.coffee
+
+      jQuery ->
+        responsiveHelper = undefined
+        breakpointDefinition =
+          tablet: 1024
+          phone: 480
+
+        tableContainer = $('#people_datatable')
+
+        tableContainer.dataTable
+          sDom: "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+          sPaginationType: "bootstrap"
+          bProcessing: true
+          bServerSide: true
+          bAutoWidth:  false
+          sWrapper: "dataTables_wrapper form-inline"
+          sAjaxSource: $('#people_datatable').data('source')
+          oLanguage:{
+            sUrl: "datatable_i18n"
+          }
+
+          fnPreDrawCallback: ->
+            # Initialize the responsive datatables helper once.
+            responsiveHelper = new ResponsiveDatatablesHelper(tableContainer, breakpointDefinition)  unless responsiveHelper
+
+          fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) ->
+            responsiveHelper.createExpandIcon nRow
+
+          fnDrawCallback: (oSettings) ->
+            responsiveHelper.respond()
+
+  people/index.html.haml
+
+```html
+%table#people_datatable.table.table-striped.table-bordered.table-hover.table-condensed{'data-source' => people_url(format: 'json')}
+  %thead
+    %tr
+      %th{'data-class' => 'expand'}= model_class.human_attribute_name(:first_name)
+      %th{'data-class' => 'phone,tablet'}= model_class.human_attribute_name(:last_name)
+      %th{'data-hide'  => 'phone'}= model_class.human_attribute_name(:cpf)
+      %th{'data-hide'  => 'phone,tablet'}= model_class.human_attribute_name(:phone)
+      %th{'data-hide'  => 'phone,tablet'}= model_class.human_attribute_name(:mobile)
+  %tbody
+```          
+
