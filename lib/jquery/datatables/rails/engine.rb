@@ -19,7 +19,20 @@ module Jquery
                   dataTables/sort_asc.png
                   dataTables/sort_both.png
                   dataTables/sort_desc_disabled.png
-                  dataTables/sort_desc.png )
+                  dataTables/sort_desc.png 
+                  dataTables/extras/background.png
+                  dataTables/extras/collection_hover.png
+                  dataTables/extras/collection.png
+                  dataTables/extras/copy_hover.png
+                  dataTables/extras/copy.png
+                  dataTables/extras/csv_hover.png
+                  dataTables/extras/csv.png
+                  dataTables/extras/pdf_hover.png
+                  dataTables/extras/pdf.png
+                  dataTables/extras/print_hover.png
+                  dataTables/extras/print.png
+                  dataTables/extras/xls_hover.png
+                  dataTables/extras/xls.png )
           end
         end
       end
