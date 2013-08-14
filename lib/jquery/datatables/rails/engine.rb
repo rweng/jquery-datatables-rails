@@ -5,21 +5,21 @@ module Jquery
       module Rails
         class Engine < ::Rails::Engine
           # add initializer so that images get added to the manifest and placed in public/assets in Rails 4
-          initializer "Jquery.Datatables.Rails.assets.precompile" do |app|
+          initializer "datatables.assets.precompile" do |app|
             app.config.assets.precompile += 
-              %w( back_disabled.png
-                  back_enabled_hover.png
-                  back_enabled.png
-                  extras
-                  favicon.ico
-                  forward_disabled.png
-                  forward_enabled_hover.png
-                  forward_enabled.png
-                  sort_asc_disabled.png
-                  sort_asc.png
-                  sort_both.png
-                  sort_desc_disabled.png
-                  sort_desc.png )
+              %w( dataTables/back_disabled.png
+                  dataTables/back_enabled_hover.png
+                  dataTables/back_enabled.png
+                  dataTables/extras
+                  dataTables/favicon.ico
+                  dataTables/forward_disabled.png
+                  dataTables/forward_enabled_hover.png
+                  dataTables/forward_enabled.png
+                  dataTables/sort_asc_disabled.png
+                  dataTables/sort_asc.png
+                  dataTables/sort_both.png
+                  dataTables/sort_desc_disabled.png
+                  dataTables/sort_desc.png )
           end
         end
       end
