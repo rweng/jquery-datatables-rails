@@ -46,7 +46,7 @@ package {
 			
 			// import flashvars
 			var flashvars:Object = LoaderInfo( this.root.loaderInfo ).parameters;
-			domId = flashvars.id;
+			domId = flashvars.id.split("\\").join("\\\\");
 			
 			// invisible button covers entire stage
 			button = new Sprite();
