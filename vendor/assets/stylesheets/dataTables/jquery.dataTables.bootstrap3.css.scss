@@ -20,11 +20,11 @@ table.table thead .sorting_asc,
 table.table thead .sorting_desc,
 table.table thead .sorting_asc_disabled,
 table.table thead .sorting_desc_disabled {  cursor: pointer }
-table.table thead .sorting {  background: url("dataTables/sort_both.png") no-repeat center right }
-table.table thead .sorting_asc {  background: url("dataTables/sort_asc.png") no-repeat center right }
-table.table thead .sorting_desc {  background: url("dataTables/sort_desc.png") no-repeat center right }
-table.table thead .sorting_asc_disabled {  background: url("dataTables/sort_asc_disabled.png") no-repeat center right }
-table.table thead .sorting_desc_disabled {  background: url("dataTables/sort_desc_disabled.png") no-repeat center right }
+table.table thead .sorting {  background: url("sort_both.png") no-repeat center right }
+table.table thead .sorting_asc {  background: url("sort_asc.png") no-repeat center right }
+table.table thead .sorting_desc {  background: url("sort_desc.png") no-repeat center right }
+table.table thead .sorting_asc_disabled {  background: url("sort_asc_disabled.png") no-repeat center right }
+table.table thead .sorting_desc_disabled {  background: url("sort_desc_disabled.png") no-repeat center right }
 table.table thead .sorting,
 table.table thead .sorting_asc,
 table.table thead .sorting_desc,
