@@ -70,7 +70,7 @@ $('.datatable').dataTable({
 ```javascript
 // For fluid containers
 $('.datatable').dataTable({
-  "sPaginationType": "foundation"
+  "sPaginationType": "bootstrap"
 });
 ```
 
