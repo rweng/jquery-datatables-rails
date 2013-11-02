@@ -69,17 +69,56 @@ $('.datatable').dataTable({
 1. Initialize your datatables using one of these options:
 
 ```javascript
-// For fluid containers
 $('.datatable').dataTable({
   "sPaginationType": "bootstrap"
 });
 ```
-```javascript
-// For fixed width containers
-$('.datatable').dataTable({
-  "sPaginationType": "bootstrap"
-});
+
+## Responsive Installation
+
+1. Complete steps 1-3 of the General Installation
+1. Add the lodash gem to your application:
+
+    ```
+      gem 'lodash-rails'
+    ```
+
+1. Add some more JavaScript to `application.js`:
+
+        //= require dataTables/jquery.dataTables.bootstrap3
+        //= require dataTables/jquery.dataTables.responsive
+
+1. Add this (and only this) stylesheet to `application.css`:
+
+        *= require dataTables/jquery.dataTables.bootstrap3
+        *= require dataTables/jquery.dataTables.responsive
+
+1. Initialize your datatables using one of these options:
+
+```coffeescript
+  responsiveHelper = undefined
+  breakpointDefinition =
+    tablet: 1024
+    phone: 480
+
+  tableContainer = $('.datatable')
+  tableContainer.dataTable
+
+    sPaginationType: "bootstrap"
+    # Setup for responsive datatables helper.
+    bAutoWidth: false
+    bStateSave: false
+
+    fnPreDrawCallback: ->
+      responsiveHelper = new ResponsiveDatatablesHelper(tableContainer, breakpointDefinition) unless responsiveHelper
+
+    fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) ->
+      responsiveHelper.createExpandIcon nRow
+
+    fnDrawCallback: (oSettings) ->
+      responsiveHelper.respond()
 ```
+1. To use see the author of responsive files and follow the instructions as described on [datatables_responsive]
 
 
 ## Plugins
@@ -128,8 +167,10 @@ TableTools also requires this to be included in 'application.js':
 Make sure to also add it's initialization as described on [datatables extras' site][datatables_extras]
 
 
-
-
-
 [assets]: https://github.com/rweng/jquery-datatables-rails/tree/master/vendor/assets/javascripts/dataTables
 [datatables_extras]: http://datatables.net/extras/
+[datatables-responsive]: https://github.com/Comanche/datatables-responsive
+
+## Thanks
+
+Thanks to Comanche for responsive support files [datatables-responsive]
