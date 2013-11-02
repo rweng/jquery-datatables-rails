@@ -118,8 +118,7 @@ $('.datatable').dataTable({
     fnDrawCallback: (oSettings) ->
       responsiveHelper.respond()
 ```
-1. To use see the author of responsive files and follow the instructions as described on [datatables_responsive]
-
+1. To use see the author of responsive files and follow the instructions as described on [datatables-responsive]
 
 ## Plugins
 
