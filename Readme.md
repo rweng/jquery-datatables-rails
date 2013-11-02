@@ -93,7 +93,7 @@ $('.datatable').dataTable({
         *= require dataTables/jquery.dataTables.bootstrap3
         *= require dataTables/jquery.dataTables.responsive
 
-1. Initialize your datatables using one of these options:
+1. Initialize your datatables using:
 
 ```coffeescript
   responsiveHelper = undefined
