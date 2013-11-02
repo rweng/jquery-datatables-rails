@@ -165,11 +165,16 @@ TableTools also requires this to be included in 'application.js':
 
 Make sure to also add it's initialization as described on [datatables extras' site][datatables_extras]
 
+## Articles
 
-[assets]: https://github.com/rweng/jquery-datatables-rails/tree/master/vendor/assets/javascripts/dataTables
-[datatables_extras]: http://datatables.net/extras/
-[datatables-responsive]: https://github.com/Comanche/datatables-responsive
+[RailsCast #340 DataTables] Apr 11, 2012
 
 ## Thanks
 
 Thanks to Comanche for responsive support files [datatables-responsive]
+
+[assets]: https://github.com/rweng/jquery-datatables-rails/tree/master/vendor/assets/javascripts/dataTables
+[datatables_extras]: http://datatables.net/extras/
+[datatables-responsive]: https://github.com/Comanche/datatables-responsive
+[RailsCast #340 DataTables]: http://railscasts.com/episodes/340-datatables
+
