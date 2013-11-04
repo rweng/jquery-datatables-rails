@@ -54,44 +54,47 @@ $('.datatable').dataTable({
 });
 ```
 
-<<<<<<< HEAD
-## Zurb Foundation Installation
-=======
 
 ## Twitter Bootstrap 3 Installation
->>>>>>> 00cbd050c04d76daffc6b86611fee115d74cd691
 
 1. Complete steps 1-3 of the General Installation
 1. Add some more JavaScript to `application.js`:
 
-<<<<<<< HEAD
-        //= require dataTables/jquery.dataTables.foundation
-
-1. Add this (and only this) stylesheet to `application.css`:
-
-        *= require dataTables/jquery.dataTables.foundation
-=======
         //= require dataTables/jquery.dataTables.bootstrap3
 
 1. Add this (and only this) stylesheet to `application.css`:
 
         *= require dataTables/jquery.dataTables.bootstrap3
->>>>>>> 00cbd050c04d76daffc6b86611fee115d74cd691
 
-1. Initialize your datatables using one of these options:
+1. Initialize your datatables using these option:
 
 ```javascript
-<<<<<<< HEAD
-// For fluid containers
-=======
->>>>>>> 00cbd050c04d76daffc6b86611fee115d74cd691
 $('.datatable').dataTable({
   "sPaginationType": "bootstrap"
 });
 ```
 
-<<<<<<< HEAD
-=======
+
+## Zurb Foundation Installation
+
+1. Complete steps 1-3 of the General Installation
+
+1. Add some more JavaScript to `application.js`:
+
+        //= require dataTables/jquery.dataTables.foundation
+
+1. Add this (and only this) stylesheet to `application.css`:
+
+        *= require dataTables/jquery.dataTables.foundation
+
+1. Initialize your datatables using these option:
+
+```javascript
+$('.datatable').dataTable({
+  "sPaginationType": "foundation"
+});
+```
+
 ## Responsive Installation
 
 1. Complete steps 1-3 of the General Installation
@@ -136,9 +139,9 @@ $('.datatable').dataTable({
     fnDrawCallback: (oSettings) ->
       responsiveHelper.respond()
 ```
+
 1. To use see the author of responsive files and follow the instructions as described on [datatables-responsive]
 
->>>>>>> 00cbd050c04d76daffc6b86611fee115d74cd691
 ## Plugins
 
 Only a few plugins are currently available
@@ -186,7 +189,7 @@ Make sure to also add it's initialization as described on [datatables extras' si
 
 ## Articles
 
-[RailsCast #340 DataTables] Apr 11, 2012
+[RailsCast #340 DataTables] Apr 11, 2012.
 
 ## Thanks
 
@@ -196,4 +199,3 @@ Thanks to Comanche for responsive support files [datatables-responsive]
 [datatables_extras]: http://datatables.net/extras/
 [datatables-responsive]: https://github.com/Comanche/datatables-responsive
 [RailsCast #340 DataTables]: http://railscasts.com/episodes/340-datatables
-
