@@ -5,7 +5,7 @@
  * Language:    Javascript
  * License:     GPL v2 / 3 point BSD
  * Project:     DataTables
- * 
+ *
  * Copyright 2009-2012 Allan Jardine, all rights reserved.
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -74,7 +74,7 @@ button.DTTT_button {
 	padding: 3px 8px;
 }
 
-.DTTT_button embed { 
+.DTTT_button embed {
 	outline: none;
 }
 
@@ -104,7 +104,7 @@ div.DTTT_disabled,
 a.DTTT_disabled {
 	color: #999;
 	border: 1px solid #d0d0d0;
-	
+
 	background: #ffffff; /* Old browsers */
 	background: -webkit-linear-gradient(top, #ffffff 0%,#f9f9f9 89%,#fafafa 100%); /* Chrome10+,Safari5.1+ */
 	background:    -moz-linear-gradient(top, #ffffff 0%,#f9f9f9 89%,#fafafa 100%); /* FF3.6+ */
@@ -115,19 +115,25 @@ a.DTTT_disabled {
 }
 
 
-button.DTTT_button_csv,
-button.DTTT_button_xls,
-button.DTTT_button_copy,
-button.DTTT_button_pdf,
-button.DTTT_button_print {
+
+/*
+ * BUTTON_STYLES
+ * Action specific button styles
+ * If you want images - comment this back in
+
+a.DTTT_button_csv,
+a.DTTT_button_xls,
+a.DTTT_button_copy,
+a.DTTT_button_pdf,
+a.DTTT_button_print {
 	padding-right: 0px;
 }
 
-button.DTTT_button_csv span,
-button.DTTT_button_xls span,
-button.DTTT_button_copy span,
-button.DTTT_button_pdf span,
-button.DTTT_button_print span {
+a.DTTT_button_csv span,
+a.DTTT_button_xls span,
+a.DTTT_button_copy span,
+a.DTTT_button_pdf span,
+a.DTTT_button_print span {
 	display: inline-block;
 	height: 24px;
 	line-height: 24px;
@@ -135,30 +141,32 @@ button.DTTT_button_print span {
 }
 
 
-button.DTTT_button_csv span { background: url('/assets/dataTables/dataTables/extras/csv.png') no-repeat bottom right; }
-button.DTTT_button_csv:hover span { background: url('/assets/dataTables/dataTables/extras/csv_hover.png') no-repeat center right; }
+a.DTTT_button_csv span { background: url(../images/csv.png) no-repeat bottom right; }
+a.DTTT_button_csv:hover span { background: url(../images/csv_hover.png) no-repeat center right; }
 
-button.DTTT_button_xls span { background: url('assets/dataTables/dataTables/extras/xls.png') no-repeat center right; }
-button.DTTT_button_xls:hover span { background: #f0f0f0 url('/assets/dataTables/extras/xls_hover.png') no-repeat center right; }
+a.DTTT_button_xls span { background: url(../images/xls.png) no-repeat center right; }
+a.DTTT_button_xls:hover span { background: #f0f0f0 url(../images/xls_hover.png) no-repeat center right; }
 
-button.DTTT_button_copy span { background: url('/assets/dataTables/dataTables/extras/copy.png') no-repeat center right; }
-button.DTTT_button_copy:hover span { background: #f0f0f0 url('/assets/dataTables/extras/copy_hover.png') no-repeat center right; }
+a.DTTT_button_copy span { background: url(../images/copy.png) no-repeat center right; }
+a.DTTT_button_copy:hover span { background: #f0f0f0 url(../images/copy_hover.png) no-repeat center right; }
 
-button.DTTT_button_pdf span { background: url('/assets/dataTables/dataTables/extras/pdf.png') no-repeat center right; }
-button.DTTT_button_pdf:hover span { background: #f0f0f0 url('/assets/dataTables/extras/pdf_hover.png') no-repeat center right; }
+a.DTTT_button_pdf span { background: url(../images/pdf.png) no-repeat center right; }
+a.DTTT_button_pdf:hover span { background: #f0f0f0 url(../images/pdf_hover.png) no-repeat center right; }
 
-button.DTTT_button_print span { background: url('/assets/dataTables/dataTables/extras/print.png') no-repeat center right; }
-button.DTTT_button_print:hover span { background: #f0f0f0 url('/assets/dataTables/extras/print_hover.png') no-repeat center right; }
+a.DTTT_button_print span { background: url(../images/print.png) no-repeat center right; }
+a.DTTT_button_print:hover span { background: #f0f0f0 url(../images/print_hover.png) no-repeat center right; }
 
+ */
 
 button.DTTT_button_collection span {
 	padding-right: 17px;
-	background: url('/assets/dataTables/extras/collection.png') no-repeat center right;
+
+	background: url(<%= asset_path 'dataTables/extras/collection.png' %>) no-repeat center right;
 }
 
 button.DTTT_button_collection:hover span {
 	padding-right: 17px;
-	background: #f0f0f0 url('/assets/dataTables/extras/collection_hover.png') no-repeat center right;
+	background: #f0f0f0 url(<%= asset_path 'dataTables/extras/collection_hover.png' %>) no-repeat center right;
 }
 
 
@@ -225,7 +233,7 @@ div.DTTT_collection {
 	    -ms-border-radius: 5px;
 	     -o-border-radius: 5px;
 	        border-radius: 5px;
-	
+
 	-webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
 	   -moz-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
 	    -ms-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
@@ -234,7 +242,7 @@ div.DTTT_collection {
 }
 
 div.DTTT_collection_background {
-	background: transparent url('/assets/dataTables/extras/background.png') repeat top left;
+	background: transparent url(<%= asset_path 'dataTables/extras/background.png' %>) repeat top left;
 	z-index: 2001;
 }
 
@@ -248,7 +256,7 @@ div.DTTT_collection a.DTTT_button {
 	display: block;
 	float: none;
 	margin-bottom: 4px;
-	
+
 	-webkit-box-shadow: 1px 1px 3px #999;
 	   -moz-box-shadow: 1px 1px 3px #999;
 	    -ms-box-shadow: 1px 1px 3px #999;
@@ -281,18 +289,18 @@ div.DTTT_collection a.DTTT_button {
 	background:      -o-linear-gradient(top, #ffffff 0%,#f3f3f3 89%,#f9f9f9 100%); /* Opera 11.10+ */
 	background:         linear-gradient(top, #ffffff 0%,#f3f3f3 89%,#f9f9f9 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f9f9f9',GradientType=0 ); /* IE6-9 */
-	
+
 	opacity: 0.95;
 
 	border: 1px solid black;
 	border: 1px solid rgba(0, 0, 0, 0.5);
-	
+
 	-webkit-border-radius: 6px;
 	   -moz-border-radius: 6px;
 	    -ms-border-radius: 6px;
 	     -o-border-radius: 6px;
 	        border-radius: 6px;
-	
+
 	-webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.5);
 	   -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.5);
 	    -ms-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.5);
