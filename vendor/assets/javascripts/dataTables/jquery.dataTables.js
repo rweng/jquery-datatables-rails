@@ -1120,7 +1120,16 @@
 				{
 					var oCol = oSettings.aoColumns[i];
 					nTd = document.createElement( oCol.sCellType );
-
+					// place to set this attribute.
+					// It may make more sense to bake this into the oCol object, perhaps
+					// oCol.sRole;
+					if ( oSettings.oLanguage.sAccessibility)
+					{
+						if (oCol.sCellType == 'th')
+						{
+							nTd.setAttribute('scope', 'row');
+						}
+					}
 					/* Render if needed - if bUseRendered is true then we already have the rendered
 					 * value in the data source - so can just use that
 					 */
@@ -1176,11 +1185,22 @@
 				for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 				{
 					nTh = oSettings.aoColumns[i].nTh;
-					nTh.setAttribute('role', 'columnheader');
+					if ( oSettings.oLanguage.sAccessibility )
+					{
+						nTh.setAttribute("scope","col");
+					}
+					else
+					{
+						nTh.setAttribute('role', 'columnheader');
+					}
+
 					if ( oSettings.aoColumns[i].bSortable )
 					{
-						nTh.setAttribute('tabindex', oSettings.iTabIndex);
-						nTh.setAttribute('aria-controls', oSettings.sTableId);
+						if ( !oSettings.oLanguage.sAccessibility )
+						{
+							nTh.setAttribute('tabindex', oSettings.iTabIndex);
+							nTh.setAttribute('aria-controls', oSettings.sTableId);
+						}
 					}
 
 					if ( oSettings.aoColumns[i].sClass !== null )
@@ -1204,8 +1224,10 @@
 				{
 					nTh = oSettings.aoColumns[i].nTh;
 					nTh.innerHTML = oSettings.aoColumns[i].sTitle;
-					nTh.setAttribute('tabindex', '0');
-
+					if ( !oSettings.oLanguage.sAccessibility )
+					{
+						nTh.setAttribute('tabindex', '0');
+					}
 					if ( oSettings.aoColumns[i].sClass !== null )
 					{
 						$(nTh).addClass( oSettings.aoColumns[i].sClass );
@@ -1216,10 +1238,11 @@
 				$(oSettings.nTHead).html( '' )[0].appendChild( nTr );
 				_fnDetectHeader( oSettings.aoHeader, oSettings.nTHead );
 			}
-
-			/* ARIA role for the rows */
-			$(oSettings.nTHead).children('tr').attr('role', 'row');
-
+			if ( !oSettings.oLanguage.sAccessibility )
+			{
+				/* ARIA role for the rows */
+				$(oSettings.nTHead).children('tr').attr('role', 'row');
+			}
 			/* Add the extra markup needed by jQuery UI's themes */
 			if ( oSettings.bJUI )
 			{
@@ -2074,13 +2097,31 @@
 			var oPreviousSearch = oSettings.oPreviousSearch;
 
 			var sSearchStr = oSettings.oLanguage.sSearch;
-			sSearchStr = (sSearchStr.indexOf('_INPUT_') !== -1) ?
-			  sSearchStr.replace('_INPUT_', '<input type="text" />') :
-			  sSearchStr==="" ? '<input type="text" />' : sSearchStr+' <input type="text" />';
 
+			var sIdVal = '"'+oSettings.sTableId+'_search"';
+			var sName  = 'name='+sIdVal;
+			var sId    = 'id='+sIdVal;
+			var sFor   = 'for='+sIdVal;
+			var sStdMenu = '<input type="text" '+sId + sName+ '/>';
+			if ( oSettings.oLanguage.sAccessibility )
+			{
+
+				sSearchStr = (sSearchStr.indexOf('_INPUT_') !== -1) ?
+				sSearchStr.replace('_INPUT_', '<input type="text" />') : ' <input type="text" />';
+			}
+			else
+			{
+				sSearchStr = (sSearchStr.indexOf('_INPUT_') !== -1) ?
+				  sSearchStr.replace('_INPUT_', '<input type="text" />') :
+				  sSearchStr==="" ? '<input type="text" />' : sSearchStr+' <input type="text" />';
+			}
+
+			sSearchStr = sStdMenu;
 			var nFilter = document.createElement( 'div' );
 			nFilter.className = oSettings.oClasses.sFilter;
-			nFilter.innerHTML = '<label>'+sSearchStr+'</label>';
+			nFilter.innerHTML = '<label '+sFor+'>'+oSettings.oLanguage.sSearch+'</label>'+sSearchStr;
+
+
 			if ( !oSettings.aanFeatures.f )
 			{
 				nFilter.id = oSettings.sTableId+'_filter';
@@ -2117,18 +2158,19 @@
 					} );
 				}
 			} );
-
-			jqFilter
-				.attr('aria-controls', oSettings.sTableId)
-				.bind( 'keypress.DT', function(e) {
-					/* Prevent form submission */
-					if ( e.keyCode == 13 )
-					{
-						return false;
+			if ( !oSettings.oLanguage.sAccessibility )
+			{
+				jqFilter
+					.attr('aria-controls', oSettings.sTableId)
+					.bind( 'keypress.DT', function(e) {
+						/* Prevent form submission */
+						if ( e.keyCode == 13 )
+						{
+							return false;
+						}
 					}
-				}
-			);
-
+				);
+			}
 			return nFilter;
 		}
 
@@ -2484,7 +2526,10 @@
 				/* Add id */
 				nInfo.id = oSettings.sTableId+'_info';
 			}
-			oSettings.nTable.setAttribute( 'aria-describedby', oSettings.sTableId+'_info' );
+			if ( !oSettings.oLanguage.sAccessibility )
+			{
+				oSettings.nTable.setAttribute( 'aria-describedby', oSettings.sTableId+'_info' );
+			}
 
 			return nInfo;
 		}
@@ -2740,8 +2785,11 @@
 			}
 
 			/* This can be overruled by not using the _MENU_ var/macro in the language variable */
-			var sName = 'name="'+oSettings.sTableId+'_length"';
-			var sStdMenu = '<select size="1" '+sName+'>';
+			var sIdVal = '"'+oSettings.sTableId+'_length"';
+			var sId    = 'id='+sIdVal;
+			var sName  = 'name='+sIdVal;
+			var sFor   = 'for='+sIdVal;
+			var sStdMenu = '<select size="1" '+sId + sName+'>';
 			var i, iLen;
 			var aLengthMenu = oSettings.aLengthMenu;
 
@@ -2765,11 +2813,16 @@
 			var nLength = document.createElement( 'div' );
 			if ( !oSettings.aanFeatures.l )
 			{
-				nLength.id = oSettings.sTableId+'_length';
+				nLength.id = oSettings.sTableId+'_length_div';
 			}
-			nLength.className = oSettings.oClasses.sLength;
-			nLength.innerHTML = '<label>'+oSettings.oLanguage.sLengthMenu.replace( '_MENU_', sStdMenu )+'</label>';
-
+			if ( oSettings.oLanguage.sAccessibility)
+			{
+				nLength.innerHTML = '<label '+sFor+'>'+oSettings.oLanguage.sLengthLabel+'</label>'+oSettings.oLanguage.sLengthMenu.replace( '_MENU_', sStdMenu );
+			}
+			else
+			{
+				nLength.innerHTML = oSettings.oLanguage.sLengthMenu.replace( '_MENU_', sStdMenu );
+			}
 			/*
 			 * Set the length to the current display length - thanks to Andrea Pavlovic for this fix,
 			 * and Stefan Skopnik for fixing the fix!
@@ -2810,9 +2863,10 @@
 
 				_fnDraw( oSettings );
 			} );
-
-
-			$('select', nLength).attr('aria-controls', oSettings.sTableId);
+			if ( !oSettings.oLanguage.sAccessibility )
+			{
+				$('select', nLength).attr('aria-controls', oSettings.sTableId);
+			}
 
 			return nLength;
 		}
@@ -4061,30 +4115,48 @@
 			{
 				var sTitle = aoColumns[i].sTitle.replace( /<.*?>/g, "" );
 				nTh = aoColumns[i].nTh;
-				nTh.removeAttribute('aria-sort');
-				nTh.removeAttribute('aria-label');
+				if ( oSettings.oLanguage.sAccessibility)
+				{
+					nTh.setAttribute("scope","col");
+				}
+				else
+				{
+					nTh.removeAttribute('aria-sort');
+					nTh.removeAttribute('aria-label');
+				}
 
 				/* In ARIA only the first sorting column can be marked as sorting - no multi-sort option */
 				if ( aoColumns[i].bSortable )
 				{
 					if ( aaSort.length > 0 && aaSort[0][0] == i )
 					{
-						nTh.setAttribute('aria-sort', aaSort[0][1]=="asc" ? "ascending" : "descending" );
-
+						if ( !oSettings.oLanguage.sAccessibility )
+						{
+							nTh.setAttribute('aria-sort', aaSort[0][1]=="asc" ? "ascending" : "descending" );
+						}
 						var nextSort = (aoColumns[i].asSorting[ aaSort[0][2]+1 ]) ?
 							aoColumns[i].asSorting[ aaSort[0][2]+1 ] : aoColumns[i].asSorting[0];
-						nTh.setAttribute('aria-label', sTitle+
+						if ( !oSettings.oLanguage.sAccessibility )
+						{
+							nTh.setAttribute('aria-label', sTitle+
 							(nextSort=="asc" ? oAria.sSortAscending : oAria.sSortDescending) );
+						}
 					}
 					else
 					{
-						nTh.setAttribute('aria-label', sTitle+
+						if ( !oSettings.oLanguage.sAccessibility )
+						{
+							nTh.setAttribute('aria-label', sTitle+
 							(aoColumns[i].asSorting[0]=="asc" ? oAria.sSortAscending : oAria.sSortDescending) );
+						}
 					}
 				}
 				else
 				{
-					nTh.setAttribute('aria-label', sTitle);
+					if ( !oSettings.oLanguage.sAccessibility )
+					{
+						nTh.setAttribute('aria-label', sTitle);
+					}
 				}
 			}
 
@@ -6746,10 +6818,12 @@
 				this.appendChild( tbody[0] );
 			}
 			oSettings.nTBody = tbody[0];
-			oSettings.nTBody.setAttribute( "role", "alert" );
-			oSettings.nTBody.setAttribute( "aria-live", "polite" );
-			oSettings.nTBody.setAttribute( "aria-relevant", "all" );
-
+			if ( !oSettings.oLanguage.sAccessibility )
+			{
+				oSettings.nTBody.setAttribute( "role", "alert" );
+				oSettings.nTBody.setAttribute( "aria-live", "polite" );
+				oSettings.nTBody.setAttribute( "aria-relevant", "all" );
+			}
 			var tfoot = $(this).children('tfoot');
 			if ( tfoot.length === 0 && captions.length > 0 && (oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "") )
 			{
@@ -9407,7 +9481,9 @@
 			 *      } );
 			 *    } );
 			 */
-			"sLengthMenu": "Show _MENU_ entries",
+			"sLengthMenu": "_MENU_",
+			"sLengthLabel": "",
+			"sAccessibility": 1,
 
 
 			/**
@@ -11589,9 +11665,11 @@
 					nPaging.id = oSettings.sTableId+'_paginate';
 					nPrevious.id = oSettings.sTableId+'_previous';
 					nNext.id = oSettings.sTableId+'_next';
-
-					nPrevious.setAttribute('aria-controls', oSettings.sTableId);
-					nNext.setAttribute('aria-controls', oSettings.sTableId);
+					if ( !oSettings.oLanguage.sAccessibility )
+					{
+						nPrevious.setAttribute('aria-controls', oSettings.sTableId);
+						nNext.setAttribute('aria-controls', oSettings.sTableId);
+					}
 				}
 			},
 
