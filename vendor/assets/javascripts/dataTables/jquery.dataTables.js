@@ -9482,7 +9482,7 @@
 			 *    } );
 			 */
 			"sLengthMenu": "_MENU_",
-			"sLengthLabel": "",
+			"sLengthLabel": "Entries per page:",
 			"sAccessibility": 1,
 
 
