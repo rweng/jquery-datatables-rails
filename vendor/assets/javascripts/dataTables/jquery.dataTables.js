@@ -2815,6 +2815,7 @@
 			{
 				nLength.id = oSettings.sTableId+'_length_div';
 			}
+			nLength.className = oSettings.oClasses.sLength;
 			if ( oSettings.oLanguage.sAccessibility)
 			{
 				nLength.innerHTML = '<label '+sFor+'>'+oSettings.oLanguage.sLengthLabel+'</label>'+oSettings.oLanguage.sLengthMenu.replace( '_MENU_', sStdMenu );
