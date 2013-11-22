@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.description = %q{}
 
   s.files = `git ls-files`.split("\n")
-  s.files = Dir["{lib,vendor}/**/*"]
+  s.files = Dir["{app,lib,vendor}/**/*"]
   s.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
