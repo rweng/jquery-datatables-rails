@@ -4,7 +4,7 @@ $.extend( true, $.fn.dataTable.defaults, {
 		"<'row'<'large-6 columns'l><'large-6 columns'f>r>"+
 		"t"+
 		"<'row'<'large-6 columns'i><'large-6 columns'p>>",
-	"sPaginationType": "bootstrap",
+	"sPaginationType": "foundation",
 	"oLanguage": {
 		"sLengthMenu": "_MENU_ records per page"
 	}
@@ -28,7 +28,7 @@ $.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
 };
 
 
-/* Bootstrap style pagination control */
+/* Foundation style pagination control */
 $.extend( $.fn.dataTableExt.oPagination, {
 	"bootstrap": {
 		"fnInit": function( oSettings, nPaging, fnDraw ) {
