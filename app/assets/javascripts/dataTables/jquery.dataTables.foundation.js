@@ -28,7 +28,7 @@ $.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
 };
 
 
-/* Footstrap style pagination control */
+/* Foundation style pagination control */
 $.extend( $.fn.dataTableExt.oPagination, {
 	"foundation": {
 		"fnInit": function( oSettings, nPaging, fnDraw ) {
