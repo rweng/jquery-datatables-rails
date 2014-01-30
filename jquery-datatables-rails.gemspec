@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency "jquery-rails"
+
   s.add_dependency "sass-rails"
 end
 
