@@ -33,7 +33,8 @@ div.dataTables_paginate {
 }
 
 div.dataTables_paginate ul.pagination {
-	margin: 2px;
+	margin: 2px 0;
+	white-space: nowrap;
 }
 
 table.dataTable,
@@ -67,6 +68,11 @@ table.dataTable thead .sorting_desc { background: image-url('dataTables/sort_des
 table.dataTable thead .sorting_asc_disabled { background: image-url('dataTables/sort_asc_disabled.png') no-repeat center right; }
 table.dataTable thead .sorting_desc_disabled { background: image-url('dataTables/sort_desc_disabled.png') no-repeat center right; }
 
+table.dataTable thead > tr > th {
+	padding-left: 18px;
+	padding-right: 18px;
+}
+
 table.dataTable th:active {
 	outline: none;
 }
@@ -86,6 +92,7 @@ div.dataTables_scrollHead table thead tr:last-child td:first-child {
 
 div.dataTables_scrollBody table {
 	border-top: none;
+	margin-top: 0 !important;
 	margin-bottom: 0 !important;
 }
 
@@ -95,6 +102,7 @@ div.dataTables_scrollBody tbody tr:first-child td {
 }
 
 div.dataTables_scrollFoot table {
+	margin-top: 0 !important;
 	border-top: none;
 }
 
@@ -188,6 +196,7 @@ div.DTFC_RightHeadWrapper table,
 div.DTFC_RightFootWrapper table,
 table.DTFC_Cloned tr.even {
     background-color: white;
+    margin-bottom: 0;
 }
  
 div.DTFC_RightHeadWrapper table ,
@@ -223,4 +232,3 @@ div.DTFC_RightFootWrapper table,
 div.DTFC_LeftFootWrapper table {
     border-top: none;
 }
-
