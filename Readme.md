@@ -151,6 +151,7 @@ Only a few plugins are currently available
     * fnGetColumnData
     * fnFilterOnReturn
     * fnSetFilteringDelay
+    * fnGetHiddenNodes
 * sorting
     * numbersHtml
 * typeDetection
