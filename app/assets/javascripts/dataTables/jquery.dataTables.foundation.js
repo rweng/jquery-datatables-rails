@@ -4,7 +4,7 @@ $.extend( true, $.fn.dataTable.defaults, {
 		"<'row'<'large-6 columns'l><'large-6 columns'f>r>"+
 		"t"+
 		"<'row'<'large-6 columns'i><'large-6 columns'p>>",
-	"sPaginationType": "bootstrap",
+	"sPaginationType": "foundation",
 	"oLanguage": {
 		"sLengthMenu": "_MENU_ records per page"
 	}
@@ -28,9 +28,9 @@ $.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
 };
 
 
-/* Bootstrap style pagination control */
+/* Foundation style pagination control */
 $.extend( $.fn.dataTableExt.oPagination, {
-	"bootstrap": {
+	"foundation": {
 		"fnInit": function( oSettings, nPaging, fnDraw ) {
 			var oLang = oSettings.oLanguage.oPaginate;
 			var fnClickHandler = function ( e ) {
@@ -174,7 +174,7 @@ if ( $.fn.DataTable.TableTools ) {
 		}
 	} );
 
-	// Have the collection use a bootstrap compatible dropdown
+	// Have the collection use a Foundation compatible dropdown
 	$.extend( true, $.fn.DataTable.TableTools.DEFAULTS.oTags, {
 		"collection": {
 			"container": "ul",
