@@ -14,30 +14,44 @@ It provides all the basic DataTables files, and a few of the extras.
 
         gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
 
-1. Install the gem:
+2. Install the gem:
 
         bundle install
 
-1. Add the JavaScript to `application.js`:
+3. Run the install generator:
 
+        $ rails generate jquery:datatables:install
+
+This will add to the corresponding asset files
+
+        app/assets/javascripts/application.js
         //= require dataTables/jquery.dataTables
 
-1. Add the stylesheets to `application.css`:
-
+        app/assets/stylesheets/application.css
         *= require dataTables/jquery.dataTables
+
+        
 
 ## Twitter Bootstrap 2 Installation
 
-1. Complete steps 1-3 of the General Installation
-1. Add some more JavaScript to `application.js`:
+1. Complete steps 1-2 of the General Installation
 
+2. Run the install generator:
+    
+        $ rails generate jquery:datatables:install bootstrap2
+
+
+This will add to the corresponding asset files
+
+        app/assets/javascripts/application.js
+        //= require dataTables/jquery.dataTables
         //= require dataTables/jquery.dataTables.bootstrap
 
-1. Add this (and only this) stylesheet to `application.css`:
-
+        app/assets/stylesheets/application.css
         *= require dataTables/jquery.dataTables.bootstrap
+        
 
-1. Initialize your datatables using one of these options:
+3. Initialize your datatables using one of these options:
 
 ```javascript
 // For fluid containers
@@ -57,16 +71,22 @@ $('.datatable').dataTable({
 
 ## Twitter Bootstrap 3 Installation
 
-1. Complete steps 1-3 of the General Installation
-1. Add some more JavaScript to `application.js`:
+1. Complete steps 1-2 of the General Installation
 
+2. Run the install generator:
+    
+        $ rails generate jquery:datatables:install bootstrap3
+
+This will add to the corresponding asset files
+
+        app/assets/javascripts/application.js
+        //= require dataTables/jquery.dataTables
         //= require dataTables/jquery.dataTables.bootstrap3
 
-1. Add this (and only this) stylesheet to `application.css`:
-
+        app/assets/stylesheets/application.css
         *= require dataTables/jquery.dataTables.bootstrap3
 
-1. Initialize your datatables using these option:
+3. Initialize your datatables using these option:
 
 ```javascript
 $('.datatable').dataTable({
@@ -77,17 +97,23 @@ $('.datatable').dataTable({
 
 ## Zurb Foundation Installation
 
-1. Complete steps 1-3 of the General Installation
+1. Complete steps 1-2 of the General Installation
 
-1. Add some more JavaScript to `application.js`:
+2. Run the install generator:
+    
+        $ rails generate jquery:datatables:install foundation
 
+This will add to the corresponding asset files
+
+        app/assets/javascripts/application.js
+        //= require dataTables/jquery.dataTables
         //= require dataTables/jquery.dataTables.foundation
 
-1. Add this (and only this) stylesheet to `application.css`:
-
+        app/assets/stylesheets/application.css
         *= require dataTables/jquery.dataTables.foundation
 
-1. Initialize your datatables using these option:
+
+3. Initialize your datatables using these option:
 
 ```javascript
 $('.datatable').dataTable({
@@ -97,24 +123,31 @@ $('.datatable').dataTable({
 
 ## Responsive Installation
 
-1. Complete steps 1-3 of the General Installation
-1. Add the lodash gem to your application:
+1. Complete steps 1-2 of the General Installation
+
+2. Add the lodash gem to your application (and bundle):
 
     ```
       gem 'lodash-rails'
     ```
 
-1. Add some more JavaScript to `application.js`:
+3. Run the install generator:
+    
+        $ rails generate jquery:datatables:install responsive
 
+This will add to the corresponding asset files
+
+        app/assets/javascripts/application.js
+        //= require dataTables/jquery.dataTables
         //= require dataTables/jquery.dataTables.bootstrap3
         //= require dataTables/jquery.dataTables.responsive
 
-1. Add this (and only this) stylesheet to `application.css`:
-
+        app/assets/stylesheets/application.css
         *= require dataTables/jquery.dataTables.bootstrap3
         *= require dataTables/jquery.dataTables.responsive
 
-1. Initialize your datatables using:
+
+4. Initialize your datatables using:
 
 ```coffeescript
   responsiveHelper = undefined
@@ -199,3 +232,4 @@ Thanks to Comanche for responsive support files [datatables-responsive]
 [datatables_extras]: http://datatables.net/extras/
 [datatables-responsive]: https://github.com/Comanche/datatables-responsive
 [RailsCast #340 DataTables]: http://railscasts.com/episodes/340-datatables
+
