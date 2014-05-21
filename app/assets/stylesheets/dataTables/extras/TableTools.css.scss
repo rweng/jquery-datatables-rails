@@ -161,12 +161,12 @@ a.DTTT_button_print:hover span { background: #f0f0f0 url(../images/print_hover.p
 button.DTTT_button_collection span {
 	padding-right: 17px;
 
-	background: url(<%= asset_path 'dataTables/extras/collection.png' %>) no-repeat center right;
+	background: image-url('dataTables/extras/collection.png') no-repeat center right;
 }
 
 button.DTTT_button_collection:hover span {
 	padding-right: 17px;
-	background: #f0f0f0 url(<%= asset_path 'dataTables/extras/collection_hover.png' %>) no-repeat center right;
+	background: #f0f0f0 image-url('dataTables/extras/collection_hover.png') no-repeat center right;
 }
 
 
@@ -242,7 +242,7 @@ div.DTTT_collection {
 }
 
 div.DTTT_collection_background {
-	background: transparent url(<%= asset_path 'dataTables/extras/background.png' %>) repeat top left;
+	background: transparent image-url('dataTables/extras/background.png') repeat top left;
 	z-index: 2001;
 }
 
