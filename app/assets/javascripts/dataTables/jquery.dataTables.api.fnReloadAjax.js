@@ -1,9 +1,15 @@
 $.fn.dataTableExt.oApi.fnReloadAjax = function ( oSettings, sNewSource, fnCallback, bStandingRedraw )
 {
-    if ( typeof sNewSource != 'undefined' && sNewSource != null )
-    {
+    if ( sNewSource !== undefined && sNewSource !== null ) {
         oSettings.sAjaxSource = sNewSource;
     }
+
+    // Server-side processing should just call fnDraw
+    if ( oSettings.oFeatures.bServerSide ) {
+        this.fnDraw();
+        return;
+    }
+
     this.oApi._fnProcessingDisplay( oSettings, true );
     var that = this;
     var iStart = oSettings._iDisplayStart;
@@ -11,7 +17,7 @@ $.fn.dataTableExt.oApi.fnReloadAjax = function ( oSettings, sNewSource, fnCallba
 
     this.oApi._fnServerParams( oSettings, aData );
 
-    oSettings.fnServerData( oSettings.sAjaxSource, aData, function(json) {
+    oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, aData, function(json) {
         /* Clear the old information from the table */
         that.oApi._fnClearTable( oSettings );
 
@@ -25,20 +31,22 @@ $.fn.dataTableExt.oApi.fnReloadAjax = function ( oSettings, sNewSource, fnCallba
         }
 
         oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
+
         that.fnDraw();
 
-        if ( typeof bStandingRedraw != 'undefined' && bStandingRedraw === true )
+        if ( bStandingRedraw === true )
         {
             oSettings._iDisplayStart = iStart;
+            that.oApi._fnCalculateEnd( oSettings );
             that.fnDraw( false );
         }
 
         that.oApi._fnProcessingDisplay( oSettings, false );
 
         /* Callback user function - for event handlers etc */
-        if ( typeof fnCallback == 'function' && fnCallback != null )
+        if ( typeof fnCallback == 'function' && fnCallback !== null )
         {
             fnCallback( oSettings );
         }
     }, oSettings );
-}
+};
