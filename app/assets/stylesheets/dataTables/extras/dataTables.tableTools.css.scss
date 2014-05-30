@@ -32,11 +32,27 @@ div.DTTT_container {
 	margin-bottom: 1em;
 }
 
+@media screen and (max-width: 640px) {
+	div.DTTT_container {
+		float: none !important;
+		text-align: center;
+	}
+
+	div.DTTT_container:after {
+		visibility: hidden;
+		display: block;
+		content: "";
+		clear: both;
+		height: 0;
+	}
+}
+
+
 button.DTTT_button,
 div.DTTT_button,
 a.DTTT_button {
 	position: relative;
-	float: left;
+	display: inline-block;
 	margin-right: 3px;
 	padding: 5px 8px;
 	border: 1px solid #999;
@@ -141,32 +157,31 @@ a.DTTT_button_print span {
 }
 
 
-a.DTTT_button_csv span { background: url(../images/csv.png) no-repeat bottom right; }
-a.DTTT_button_csv:hover span { background: url(../images/csv_hover.png) no-repeat center right; }
+a.DTTT_button_csv span { background: image-url('dataTables/extras/csv.png') no-repeat bottom right; }
+a.DTTT_button_csv:hover span { background: image-url('dataTables/extras/csv_hover.png') no-repeat center right; }
 
-a.DTTT_button_xls span { background: url(../images/xls.png) no-repeat center right; }
-a.DTTT_button_xls:hover span { background: #f0f0f0 url(../images/xls_hover.png) no-repeat center right; }
+a.DTTT_button_xls span { background: image-url('dataTables/extras/xls.png') no-repeat center right; }
+a.DTTT_button_xls:hover span { background: #f0f0f0 image-url('dataTables/extras/xls_hover.png') no-repeat center right; }
 
-a.DTTT_button_copy span { background: url(../images/copy.png) no-repeat center right; }
-a.DTTT_button_copy:hover span { background: #f0f0f0 url(../images/copy_hover.png) no-repeat center right; }
+a.DTTT_button_copy span { background: image-url('dataTables/extras/copy.png') no-repeat center right; }
+a.DTTT_button_copy:hover span { background: #f0f0f0 image-url('dataTables/extras/copy_hover.png') no-repeat center right; }
 
-a.DTTT_button_pdf span { background: url(../images/pdf.png) no-repeat center right; }
-a.DTTT_button_pdf:hover span { background: #f0f0f0 url(../images/pdf_hover.png) no-repeat center right; }
+a.DTTT_button_pdf span { background: image-url('dataTables/extras/pdf.png') no-repeat center right; }
+a.DTTT_button_pdf:hover span { background: #f0f0f0 image-url('dataTables/extras/pdf_hover.png') no-repeat center right; }
 
-a.DTTT_button_print span { background: url(../images/print.png) no-repeat center right; }
-a.DTTT_button_print:hover span { background: #f0f0f0 url(../images/print_hover.png) no-repeat center right; }
+a.DTTT_button_print span { background: image-url('dataTables/extras/print.png') no-repeat center right; }
+a.DTTT_button_print:hover span { background: #f0f0f0 image-url('dataTables/extras/print_hover.png') no-repeat center right; }
 
  */
 
 button.DTTT_button_collection span {
 	padding-right: 17px;
-
-	background: url(<%= asset_path 'dataTables/extras/collection.png' %>) no-repeat center right;
+	background: image-url('dataTables/extras/collection.png') no-repeat center right;
 }
 
 button.DTTT_button_collection:hover span {
 	padding-right: 17px;
-	background: #f0f0f0 url(<%= asset_path 'dataTables/extras/collection_hover.png' %>) no-repeat center right;
+	background: #f0f0f0 image-url('dataTables/extras/collection_hover.png') no-repeat center right;
 }
 
 
@@ -242,7 +257,7 @@ div.DTTT_collection {
 }
 
 div.DTTT_collection_background {
-	background: transparent url(<%= asset_path 'dataTables/extras/background.png' %>) repeat top left;
+	background: transparent image-url('dataTables/extras/background.png') repeat top left;
 	z-index: 2001;
 }
 

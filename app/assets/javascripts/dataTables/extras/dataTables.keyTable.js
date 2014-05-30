@@ -1,26 +1,37 @@
-/*
- * File:        KeyTable.js
- * Version:     1.1.7
- * CVS:         $Idj$
- * Description: Keyboard navigation for HTML tables
- * Author:      Allan Jardine (www.sprymedia.co.uk)
- * Created:     Fri Mar 13 21:24:02 GMT 2009
- * Modified:    $Date$ by $Author$
- * Language:    Javascript
- * License:     GPL v2 or BSD 3 point style
- * Project:     Just a little bit of fun :-)
- * Contact:     www.sprymedia.co.uk/contact
- *
- * Copyright 2009-2011 Allan Jardine, all rights reserved.
- *
- * This source file is free software, under either the GPL v2 license or a
- * BSD style license, available at:
- *   http://datatables.net/license_gpl2
- *   http://datatables.net/license_bsd
+/*! KeyTable 1.2.0
+ * ©2010-2014 SpryMedia Ltd - datatables.net/license
  */
 
+/**
+ * @summary     KeyTable
+ * @description Spreadsheet like keyboard navigation for DataTables
+ * @version     1.2.0
+ * @file        dataTables.keyTable.js
+ * @author      SpryMedia Ltd (www.sprymedia.co.uk)
+ * @contact     www.sprymedia.co.uk/contact
+ * @copyright   Copyright 2009-2014 SpryMedia Ltd.
+ *
+ * This source file is free software, available under the following license:
+ *   MIT license - http://datatables.net/license/mit
+ *
+ * This source file is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the license files for details.
+ *
+ * For details please refer to: http://www.datatables.net
+ */
 
-function KeyTable ( oInit )
+// Global scope for KeyTable for backwards compatibility. Will be removed in 1.3
+var KeyTable;
+
+
+(function(window, document, undefined) {
+
+
+var factory = function( $, DataTable ) {
+"use strict";
+
+KeyTable = function ( oInit )
 {
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 * API parameters
@@ -106,6 +117,18 @@ function KeyTable ( oInit )
 	};
 
 
+	/*
+	 * Function: fnBlur
+	 * Purpose:  Blur the current focus
+	 * Returns:  -
+	 * Inputs:   -
+	 */
+	this.fnBlur = function()
+	{
+		_fnBlur();
+	};
+
+
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 * Private parameters
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -118,8 +141,8 @@ function KeyTable ( oInit )
 	var _nBody = null;
 
 	/*
-	 * Variable:
-	 * Purpose:
+	 * Variable: 
+	 * Purpose:  
 	 * Scope:    KeyTable - private
 	 */
 	var _nOldFocus = null;
@@ -167,7 +190,8 @@ function KeyTable ( oInit )
 
 	/*
 	 * Variable: _oDatatable
-	 * Purpose:  DataTables object for if we are actually using a DataTables table
+	 * Purpose:  DataTables settings object for if we are actually using a 
+	 *           DataTables table
 	 * Scope:    KeyTable - private
 	 */
 	var _oDatatable = null;
@@ -208,8 +232,8 @@ function KeyTable ( oInit )
 		 */
 		return function ( x, y, z ) {
 			if ( (x===null || typeof x == "number") &&
-			     (y===null || typeof y == "number") &&
-			     typeof z == "function" )
+				 (y===null || typeof y == "number") &&
+				 typeof z == "function" )
 			{
 				_fnEventAdd( sKey, x, y, z );
 			}
@@ -250,7 +274,7 @@ function KeyTable ( oInit )
 		 */
 		return function ( x, y, z ) {
 			if ( (x===null || typeof arguments[0] == "number") &&
-			     (y===null || typeof arguments[1] == "number" ) )
+				 (y===null || typeof arguments[1] == "number" ) )
 			{
 				if ( typeof arguments[2] == "function" )
 				{
@@ -328,7 +352,7 @@ function KeyTable ( oInit )
 			if ( typeof fn != 'undefined' )
 			{
 				if ( _oaoEvents[sType][i-iCorrector].x == x &&
-				     _oaoEvents[sType][i-iCorrector].y == y &&
+					 _oaoEvents[sType][i-iCorrector].y == y &&
 					   _oaoEvents[sType][i-iCorrector].fn == fn )
 				{
 					_oaoEvents[sType].splice( i-iCorrector, 1 );
@@ -338,7 +362,7 @@ function KeyTable ( oInit )
 			else
 			{
 				if ( _oaoEvents[sType][i-iCorrector].x == x &&
-				     _oaoEvents[sType][i-iCorrector].y == y )
+					 _oaoEvents[sType][i-iCorrector].y == y )
 				{
 					_oaoEvents[sType].splice( i, 1 );
 					return 1;
@@ -367,9 +391,9 @@ function KeyTable ( oInit )
 		for ( var i=0 ; i<aEvents.length ; i++ )
 		{
 			if ( (aEvents[i].x == x     && aEvents[i].y == y    ) ||
-			     (aEvents[i].x === null && aEvents[i].y == y    ) ||
-			     (aEvents[i].x == x     && aEvents[i].y === null ) ||
-			     (aEvents[i].x === null && aEvents[i].y === null )
+				 (aEvents[i].x === null && aEvents[i].y == y    ) ||
+				 (aEvents[i].x == x     && aEvents[i].y === null ) ||
+				 (aEvents[i].x === null && aEvents[i].y === null )
 			)
 			{
 				aEvents[i].fn( _fnCellFromCoords(x,y), x, y );
@@ -412,14 +436,14 @@ function KeyTable ( oInit )
 		}
 
 		/* Add the new class to highlight the focused cell */
-		jQuery(nTarget).addClass( _sFocusClass );
-		jQuery(nTarget).parent().addClass( _sFocusClass );
+		$(nTarget).addClass( _sFocusClass );
+		$(nTarget).parent().addClass( _sFocusClass );
 
 		/* If it's a DataTable then we need to jump the paging to the relevant page */
 		var oSettings;
 		if ( _oDatatable )
 		{
-			oSettings = _oDatatable.fnSettings();
+			oSettings = _oDatatable;
 			var iRow = _fnFindDtCell( nTarget )[1];
 			var bKeyCaptureCache = _bKeyCapture;
 
@@ -472,10 +496,10 @@ function KeyTable ( oInit )
 		if ( bAutoScroll )
 		{
 			/* Scroll the viewport such that the new cell is fully visible in the rendered window */
-			iViewportHeight = document.documentElement.clientHeight;
-			iViewportWidth = document.documentElement.clientWidth;
-			iScrollTop = document.body.scrollTop || document.documentElement.scrollTop;
-			iScrollLeft = document.body.scrollLeft || document.documentElement.scrollLeft;
+			iViewportHeight = $(window).height();
+			iViewportWidth = $(window).width();
+			iScrollTop = $(document).scrollTop();
+			iScrollLeft = $(document).scrollLeft();
 			iHeight = nTarget.offsetHeight;
 			iWidth = nTarget.offsetWidth;
 			aiPos = _fnGetPos( nTarget );
@@ -580,8 +604,8 @@ function KeyTable ( oInit )
 	 */
 	function _fnRemoveFocus( nTarget )
 	{
-		jQuery(nTarget).removeClass( _sFocusClass );
-		jQuery(nTarget).parent().removeClass( _sFocusClass );
+		$(nTarget).removeClass( _sFocusClass );
+		$(nTarget).parent().removeClass( _sFocusClass );
 		_fnEventFire( "blur", _iOldX, _iOldY );
 	}
 
@@ -627,7 +651,7 @@ function KeyTable ( oInit )
 		/* If a modifier key is pressed (exapct shift), ignore the event */
 		if ( e.metaKey || e.altKey || e.ctrlKey )
 		{
-		    return true;
+			return true;
 		}
 		var
 			x, y,
@@ -637,13 +661,12 @@ function KeyTable ( oInit )
 		/* Get table height and width - done here so as to be dynamic (if table is updated) */
 		if ( _oDatatable )
 		{
-			/*
+			/* 
 			 * Locate the current node in the DataTable overriding the old positions - the reason for
 			 * is is that there might have been some DataTables interaction between the last focus and
 			 * now
 			 */
-			var oSettings = _oDatatable.fnSettings();
-			iTableHeight = oSettings.aiDisplay.length;
+			iTableHeight = _oDatatable.aiDisplay.length;
 
 			var aDtPos = _fnFindDtCell( _nOldFocus );
 			if ( aDtPos === null )
@@ -665,8 +688,8 @@ function KeyTable ( oInit )
 		switch( iKey )
 		{
 			case 13: /* return */
-			 	e.preventDefault();
- 				e.stopPropagation();
+				e.preventDefault();
+				e.stopPropagation();
 				_fnEventFire( "action", _iOldX, _iOldY );
 				return true;
 
@@ -699,7 +722,7 @@ function KeyTable ( oInit )
 						_bInputFocused = true;
 						_nInput.focus();
 
-						/* This timeout is a little nasty - but IE appears to have some asyhnc behaviour for
+						/* This timeout is a little nasty - but IE appears to have some asyhnc behaviour for 
 						 * focus
 						 */
 						setTimeout( function(){ _bInputFocused = false; }, 0 );
@@ -723,6 +746,19 @@ function KeyTable ( oInit )
 				}
 				break;
 
+			case 36: /* home */
+				x = _iOldX;
+				y = 0;
+				break;
+
+			case 33: /* page up */
+				x = _iOldX;
+				y = _iOldY - 10;
+				if (y < 0) {
+					y = 0;
+				}
+				break;
+
 			case 9: /* tab */
 			case 39: /* right arrow */
 				if ( _iOldX < iTableWidth-1 ) {
@@ -741,7 +777,7 @@ function KeyTable ( oInit )
 						_bInputFocused = true;
 						_nInput.focus();
 
-						/* This timeout is a little nasty - but IE appears to have some asyhnc behaviour for
+						/* This timeout is a little nasty - but IE appears to have some asyhnc behaviour for 
 						 * focus
 						 */
 						setTimeout( function(){ _bInputFocused = false; }, 0 );
@@ -762,6 +798,19 @@ function KeyTable ( oInit )
 					y = _iOldY + 1;
 				} else {
 					return false;
+				}
+				break;
+
+			case 35: /* end */
+				x = _iOldX;
+				y = iTableHeight-1;
+				break;
+
+			case 34: /* page down */
+				x = _iOldX;
+				y = _iOldY+10;
+				if (y > iTableHeight-1) {
+					y = iTableHeight-1;
 				}
 				break;
 
@@ -817,10 +866,9 @@ function KeyTable ( oInit )
 	{
 		if ( _oDatatable )
 		{
-			var oSettings = _oDatatable.fnSettings();
-			if ( typeof oSettings.aoData[ oSettings.aiDisplay[ y ] ] != 'undefined' )
+			if ( typeof _oDatatable.aoData[ _oDatatable.aiDisplay[ y ] ] != 'undefined' )
 			{
-				return oSettings.aoData[ oSettings.aiDisplay[ y ] ].nTr.getElementsByTagName('td')[x];
+				return _oDatatable.aoData[ _oDatatable.aiDisplay[ y ] ].nTr.getElementsByTagName('td')[x];
 			}
 			else
 			{
@@ -829,7 +877,7 @@ function KeyTable ( oInit )
 		}
 		else
 		{
-			return jQuery('tr:eq('+y+')>td:eq('+x+')', _nBody )[0];
+			return $('tr:eq('+y+')>td:eq('+x+')', _nBody )[0];
 		}
 	}
 
@@ -845,17 +893,16 @@ function KeyTable ( oInit )
 	{
 		if ( _oDatatable )
 		{
-			var oSettings = _oDatatable.fnSettings();
 			return [
-				jQuery('td', n.parentNode).index(n),
-				jQuery('tr', n.parentNode.parentNode).index(n.parentNode) + oSettings._iDisplayStart
+				$('td', n.parentNode).index(n),
+				$('tr', n.parentNode.parentNode).index(n.parentNode) + _oDatatable._iDisplayStart
 			];
 		}
 		else
 		{
 			return [
-				jQuery('td', n.parentNode).index(n),
-				jQuery('tr', n.parentNode.parentNode).index(n.parentNode)
+				$('td', n.parentNode).index(n),
+				$('tr', n.parentNode.parentNode).index(n.parentNode)
 			];
 		}
 	}
@@ -925,10 +972,9 @@ function KeyTable ( oInit )
 	 */
 	function _fnFindDtCell( nTarget )
 	{
-		var oSettings = _oDatatable.fnSettings();
-		for ( var i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ )
+		for ( var i=0, iLen=_oDatatable.aiDisplay.length ; i<iLen ; i++ )
 		{
-			var nTr = oSettings.aoData[ oSettings.aiDisplay[i] ].nTr;
+			var nTr = _oDatatable.aoData[ _oDatatable.aiDisplay[i] ].nTr;
 			var nTds = nTr.getElementsByTagName('td');
 			for ( var j=0, jLen=nTds.length ; j<jLen ; j++ )
 			{
@@ -961,7 +1007,7 @@ function KeyTable ( oInit )
 	 *   bool:initScroll - scroll the view port on load, default true
 	 *   int:tabIndex - the tab index to give the hidden input element
 	 */
-	function _fnInit( oInit, that )
+	function _fnInit( table, datatable, oInit, that )
 	{
 		/* Save scope */
 		_that = that;
@@ -975,18 +1021,15 @@ function KeyTable ( oInit )
 			oInit.focus = [0,0];
 		}
 
-		if ( typeof oInit.table == 'undefined' ) {
-			oInit.table = jQuery('table.KeyTable')[0];
-		} else {
-			$(oInit.table).addClass('KeyTable');
-		}
+		oInit.table = table;
+		$(oInit.table).addClass('KeyTable');
 
 		if ( typeof oInit.focusClass != 'undefined' ) {
 			_sFocusClass = oInit.focusClass;
 		}
 
-		if ( typeof oInit.datatable != 'undefined' ) {
-			_oDatatable = oInit.datatable;
+		if ( typeof datatable != 'undefined' ) {
+			_oDatatable = datatable;
 		}
 
 		if ( typeof oInit.initScroll == 'undefined' ) {
@@ -1018,7 +1061,7 @@ function KeyTable ( oInit )
 			nDiv.appendChild(_nInput);
 			oInit.table.parentNode.insertBefore( nDiv, oInit.table.nextSibling );
 
-			jQuery(_nInput).focus( function () {
+			$(_nInput).focus( function () {
 				/* See if we want to 'tab into' the table or out */
 				if ( !_bInputFocused )
 				{
@@ -1053,41 +1096,20 @@ function KeyTable ( oInit )
 			_fnCaptureKeys();
 		}
 
-		/*
-		 * Add event listeners
-		 * Well - I hate myself for doing this, but it would appear that key events in browsers are
-		 * a complete mess, particulay when you consider arrow keys, which of course are one of the
-		 * main areas of interest here. So basically for arrow keys, there is no keypress event in
-		 * Safari and IE, while there is in Firefox and Opera. But Firefox and Opera don't repeat the
-		 * keydown event for an arrow key. OUCH. See the following two articles for more:
-		 *   http://www.quirksmode.org/dom/events/keys.html
-		 *   https://lists.webkit.org/pipermail/webkit-dev/2007-December/002992.html
-		 *   http://unixpapa.com/js/key.html
-		 * PPK considers the IE / Safari method correct (good enough for me!) so we (urgh) detect
-		 * Mozilla and Opera and apply keypress for them, while everything else gets keydown. If
-		 * Mozilla or Opera change their implemention in future, this will need to be updated...
-		 * although at the time of writing (14th March 2009) Minefield still uses the 3.0 behaviour.
-		 */
-		if ( jQuery.browser.mozilla || jQuery.browser.opera )
-		{
-			jQuery(document).bind( "keypress", _fnKey );
-		}
-		else
-		{
-			jQuery(document).bind( "keydown", _fnKey );
-		}
+		/* Add event listeners */
+		$(document).bind( "keydown", _fnKey );
 
 		if ( _oDatatable )
 		{
-			jQuery('tbody td', _oDatatable.fnSettings().nTable).live( 'click', _fnClick );
+			$(_oDatatable.nTable).on( 'click', 'td', _fnClick );
 		}
 		else
 		{
-			jQuery('td', _nBody).live( 'click', _fnClick );
+			$(_nBody).on( 'click', 'td', _fnClick );
 		}
 
 		/* Loose table focus when click outside the table */
-		jQuery(document).click( function(e) {
+		$(document).click( function(e) {
 			var nTarget = e.target;
 			var bTableClick = false;
 			while ( nTarget )
@@ -1106,6 +1128,44 @@ function KeyTable ( oInit )
 		} );
 	}
 
+	var table, datatable;
+
+	if ( oInit === undefined ) {
+		table = $('table.KeyTable')[0];
+		datatable = null;
+	}
+	else if ( $.isPlainObject( oInit ) ) {
+		table = oInit.table;
+		datatable = oInit.datatable;
+	}
+	else {
+		datatable = new $.fn.dataTable.Api( oInit ).settings()[0];
+		table = datatable.nTable;
+	}
 	/* Initialise our new object */
-	_fnInit( oInit, this );
+	_fnInit( table, datatable, oInit, this );
+};
+
+
+KeyTable.version = "1.2.0";
+
+
+$.fn.dataTable.KeyTable = KeyTable;
+$.fn.DataTable.KeyTable = KeyTable;
+
+
+return KeyTable;
+}; // /factory
+
+
+// Define as an AMD module if possible
+if ( typeof define === 'function' && define.amd ) {
+	define( 'datatables-keytable', ['jquery', 'datatables'], factory );
 }
+else if ( jQuery && !jQuery.fn.dataTable.KeyTable ) {
+	// Otherwise simply initialise as normal, stopping multiple evaluation
+	factory( jQuery, jQuery.fn.dataTable );
+}
+
+
+})(window, document);
