@@ -178,7 +178,7 @@ To add an extra into your application, add its JS file to `application.js` using
 Additionally, you may need to add any associated CSS files. For instance the TableTools extra requires
 you to add the following two lines to your `application.css` file:
 
-    *= require dataTables/extras/TableTools
+    *= require dataTables/extras/dataTables.tableTools
     *= require dataTables/extras/TableTools_JUI
 
 TableTools also requires this to be included in 'application.js':
