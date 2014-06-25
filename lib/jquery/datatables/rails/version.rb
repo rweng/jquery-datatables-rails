@@ -1,7 +1,7 @@
 module Jquery
   module Datatables
     module Rails
-      VERSION = "1.12.2"
+      VERSION = "1.12.3"
     end
   end
 end
