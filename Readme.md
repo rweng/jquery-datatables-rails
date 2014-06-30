@@ -132,8 +132,8 @@ gem 'lodash-rails'
 1. Add this (and only this) stylesheet to `application.css`:
 
 ```css
-*= require dataTables/jquery.dataTables.bootstrap3
-*= require dataTables/jquery.dataTables.responsive
+*= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
+*= require dataTables/extras/dataTables.responsive
 ```
 
 1. Initialize your datatables using:
