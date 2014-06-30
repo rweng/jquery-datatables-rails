@@ -218,6 +218,7 @@ Make sure to also add it's initialization as described on [datatables extras' si
 ## Articles and Extras
 
 [RailsCast #340 DataTables] Apr 11, 2012.
+
 [ajax-datatables-rails] a wrapper around datatable's ajax methods that allow synchronization with server-side
 
 ## Thanks
