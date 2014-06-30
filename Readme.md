@@ -215,9 +215,10 @@ TableTools also requires this to be included in 'application.js':
 
 Make sure to also add it's initialization as described on [datatables extras' site][datatables_extras]
 
-## Articles
+## Articles and Extras
 
 [RailsCast #340 DataTables] Apr 11, 2012.
+[ajax-datatables-rails] a wrapper around datatable's ajax methods that allow synchronization with server-side
 
 ## Thanks
 
@@ -227,3 +228,4 @@ Thanks to Comanche for responsive support files [datatables-responsive]
 [datatables_extras]: http://datatables.net/extras/
 [datatables-responsive]: https://github.com/Comanche/datatables-responsive
 [RailsCast #340 DataTables]: http://railscasts.com/episodes/340-datatables
+[ajax-datatables-rails]: https://github.com/antillas21/ajax-datatables-rails
