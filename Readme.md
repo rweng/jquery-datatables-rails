@@ -12,30 +12,42 @@ It provides all the basic DataTables files, and a few of the extras.
 
 1. Add to your Gemfile:
 
-        gem 'jquery-datatables-rails', '~> 2.1.10.0.0'
+```ruby
+gem 'jquery-datatables-rails', '~> 2.1.10.0.0'
+```
 
 1. Install the gem:
 
-        bundle install
+```bash
+bundle install
+```
 
 1. Add the JavaScript to `application.js`:
 
-        //= require dataTables/jquery.dataTables
+```javascript
+//= require dataTables/jquery.dataTables
+```
 
 1. Add the stylesheets to `application.css`:
 
-        *= require dataTables/jquery.dataTables
+```css
+*= require dataTables/jquery.dataTables
+```
 
 ## Twitter Bootstrap 2 Installation
 
 1. Complete steps 1-3 of the General Installation
 1. Add some more JavaScript to `application.js`:
 
-        //= require dataTables/jquery.dataTables.bootstrap
+```javascript
+//= require dataTables/bootstrap/2/jquery.dataTables.bootstrap
+```
 
 1. Add this (and only this) stylesheet to `application.css`:
 
-        *= require dataTables/jquery.dataTables.bootstrap
+```css
+*= require dataTables/bootstrap/2/jquery.dataTables.bootstrap
+```
 
 1. Initialize your datatables using one of these options:
 
@@ -45,8 +57,7 @@ $('.datatable').dataTable({
   "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
   "sPaginationType": "bootstrap"
 });
-```
-```javascript
+
 // For fixed width containers
 $('.datatable').dataTable({
   "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
@@ -54,17 +65,20 @@ $('.datatable').dataTable({
 });
 ```
 
-
 ## Twitter Bootstrap 3 Installation
 
 1. Complete steps 1-3 of the General Installation
 1. Add some more JavaScript to `application.js`:
 
-        //= require dataTables/jquery.dataTables.bootstrap3
+```javascript
+//= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
+```
 
 1. Add this (and only this) stylesheet to `application.css`:
 
-        *= require dataTables/jquery.dataTables.bootstrap3
+```css
+*= require dataTables/bootstrap/3jquery.dataTables.bootstrap3
+```
 
 1. Initialize your datatables using these option:
 
@@ -81,11 +95,15 @@ $('.datatable').dataTable({
 
 1. Add some more JavaScript to `application.js`:
 
-        //= require dataTables/jquery.dataTables.foundation
+```javascript
+//= require dataTables/jquery.dataTables.foundation
+```
 
 1. Add this (and only this) stylesheet to `application.css`:
 
-        *= require dataTables/jquery.dataTables.foundation
+```css
+*= require dataTables/jquery.dataTables.foundation
+```
 
 1. Initialize your datatables using these option:
 
@@ -100,44 +118,48 @@ $('.datatable').dataTable({
 1. Complete steps 1-3 of the General Installation
 1. Add the lodash gem to your application:
 
-    ```
-      gem 'lodash-rails'
-    ```
+```ruby
+gem 'lodash-rails'
+```
 
 1. Add some more JavaScript to `application.js`:
 
-        //= require dataTables/jquery.dataTables.bootstrap3
-        //= require dataTables/jquery.dataTables.responsive
+```javascript
+//= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
+//= require dataTables/extras/dataTables.responsive
+```
 
 1. Add this (and only this) stylesheet to `application.css`:
 
-        *= require dataTables/jquery.dataTables.bootstrap3
-        *= require dataTables/jquery.dataTables.responsive
+```css
+*= require dataTables/jquery.dataTables.bootstrap3
+*= require dataTables/jquery.dataTables.responsive
+```
 
 1. Initialize your datatables using:
 
 ```coffeescript
-  responsiveHelper = undefined
-  breakpointDefinition =
-    tablet: 1024
-    phone: 480
+responsiveHelper = undefined
+breakpointDefinition =
+  tablet: 1024
+  phone: 480
 
-  tableContainer = $('.datatable')
-  tableContainer.dataTable
+tableElement = $("#example")
+tableElement.dataTable
+  autoWidth: false
+  preDrawCallback: ->
 
-    sPaginationType: "bootstrap"
-    # Setup for responsive datatables helper.
-    bAutoWidth: false
-    bStateSave: false
+    # Initialize the responsive datatables helper once.
+    responsiveHelper = new ResponsiveDatatablesHelper(tableElement, breakpointDefinition)  unless responsiveHelper
+    return
 
-    fnPreDrawCallback: ->
-      responsiveHelper = new ResponsiveDatatablesHelper(tableContainer, breakpointDefinition) unless responsiveHelper
+  rowCallback: (nRow) ->
+    responsiveHelper.createExpandIcon nRow
+    return
 
-    fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) ->
-      responsiveHelper.createExpandIcon nRow
-
-    fnDrawCallback: (oSettings) ->
-      responsiveHelper.respond()
+  drawCallback: (oSettings) ->
+    responsiveHelper.respond()
+    return
 ```
 
 1. To use see the author of responsive files and follow the instructions as described on [datatables-responsive]
@@ -173,17 +195,23 @@ Only the official extras are available:
 
 To add an extra into your application, add its JS file to `application.js` using the following pattern:
 
-    //= require dataTables/extras/[ExtraName]
+```javascript
+//= require dataTables/extras/[ExtraName]
+```
 
 Additionally, you may need to add any associated CSS files. For instance the TableTools extra requires
 you to add the following two lines to your `application.css` file:
 
-    *= require dataTables/extras/dataTables.tableTools
-    *= require dataTables/extras/TableTools_JUI
+```css
+*= require dataTables/extras/dataTables.tableTools
+*= require dataTables/extras/TableTools_JUI
+```
 
 TableTools also requires this to be included in 'application.js':
 
-    //= require dataTables/extras/ZeroClipboard.js
+```javascript
+//= require dataTables/extras/ZeroClipboard.js
+```
 
 Make sure to also add it's initialization as described on [datatables extras' site][datatables_extras]
 
