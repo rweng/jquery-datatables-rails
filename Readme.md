@@ -12,7 +12,7 @@ It provides all the basic DataTables files, and a few of the extras.
 
 1. Add to your Gemfile:
 
-        gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
+        gem 'jquery-datatables-rails', '~> 2.1.10.0.0'
 
 1. Install the gem:
 
