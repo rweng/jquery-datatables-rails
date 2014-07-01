@@ -1,4 +1,7 @@
+
+
 # jquery-datatables-rails
+[![Gem Version](https://badge.fury.io/rb/jquery-datatables-rails.svg)](http://badge.fury.io/rb/jquery-datatables-rails)
 
 This gem packages the jQuery [DataTables](http://datatables.net/) plugin for easy use with the Rails 3.1+ asset pipleine.
 It provides all the basic DataTables files, and a few of the extras.
@@ -200,8 +203,7 @@ Official extras are available:
 Unofficial extra is available:
 * Responsive
 
-
-
+### How to use Extras
 1 - To add an extra into your application, add its JS file to `application.js` using the following pattern:
 
 ```javascript
