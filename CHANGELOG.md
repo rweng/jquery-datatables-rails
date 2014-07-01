@@ -1,3 +1,8 @@
+## 2.1.10.0.2
+
+Bugfixies:
+  - Moved jquery-datatatables.bootstrap.js to correct folder (bootstrap/2)
+
 ## 2.1.10.0.1
 
 Features:
