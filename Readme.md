@@ -1,35 +1,38 @@
 # jquery-datatables-rails
 
 This gem packages the jQuery [DataTables](http://datatables.net/) plugin for easy use with the Rails 3.1+ asset pipleine.
+It provides all the basic DataTables files, and a few of the extras.
 
 # Important
 
-The current gem is released without updated plugins.
-If you encounter any errors, please fork the repository, update the plugin files and send a pull-request.
+**The current gem is released without updated plugins.**
+**Take care of using the gem from master repository, there are general changes. [CHANGELOG.md](CHANGELOG.md)**
 
-It provides all the basic DataTables files, and a few of the extras.
+If you encounter any errors, please fork the repository, update the plugin files and send a pull-request.
 
 ## General Installation
 
-1. Add to your Gemfile:
+**This is README is valid only for 2.1.10.0.1 version**
+
+1 - Add to your Gemfile:
 
 ```ruby
 gem 'jquery-datatables-rails', '~> 2.1.10.0.1'
 ```
 
-1. Install the gem:
+2 - Install the gem:
 
 ```bash
 bundle install
 ```
 
-1. Add the JavaScript to `application.js`:
+3 - Add the JavaScript to `application.js`:
 
 ```javascript
 //= require dataTables/jquery.dataTables
 ```
 
-1. Add the stylesheets to `application.css`:
+4 - Add the stylesheets to `application.css`:
 
 ```css
 *= require dataTables/jquery.dataTables
@@ -37,20 +40,20 @@ bundle install
 
 ## Twitter Bootstrap 2 Installation
 
-1. Complete steps 1-3 of the General Installation
-1. Add some more JavaScript to `application.js`:
+1 - Complete steps 1-3 of the General Installation
+2 - Add some more JavaScript to `application.js`:
 
 ```javascript
 //= require dataTables/bootstrap/2/jquery.dataTables.bootstrap
 ```
 
-1. Add this (and only this) stylesheet to `application.css`:
+3 - Add this (and only this) stylesheet to `application.css`:
 
 ```css
 *= require dataTables/bootstrap/2/jquery.dataTables.bootstrap
 ```
 
-1. Initialize your datatables using one of these options:
+4 - Initialize your datatables using one of these options:
 
 ```javascript
 // For fluid containers
@@ -68,20 +71,20 @@ $('.datatable').dataTable({
 
 ## Twitter Bootstrap 3 Installation
 
-1. Complete steps 1-3 of the General Installation
-1. Add some more JavaScript to `application.js`:
+1 - Complete steps 1-3 of the General Installation
+2 - Add some more JavaScript to `application.js`:
 
 ```javascript
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 ```
 
-1. Add this (and only this) stylesheet to `application.css`:
+3 - Add this (and only this) stylesheet to `application.css`:
 
 ```css
 *= require dataTables/bootstrap/3jquery.dataTables.bootstrap3
 ```
 
-1. Initialize your datatables using these option:
+4 - Initialize your datatables using these option:
 
 ```javascript
 $('.datatable').dataTable({
@@ -92,21 +95,21 @@ $('.datatable').dataTable({
 
 ## Zurb Foundation Installation
 
-1. Complete steps 1-3 of the General Installation
+1 - Complete steps 1-3 of the General Installation
 
-1. Add some more JavaScript to `application.js`:
+2 - Add some more JavaScript to `application.js`:
 
 ```javascript
 //= require dataTables/jquery.dataTables.foundation
 ```
 
-1. Add this (and only this) stylesheet to `application.css`:
+3 - Add this (and only this) stylesheet to `application.css`:
 
 ```css
 *= require dataTables/jquery.dataTables.foundation
 ```
 
-1. Initialize your datatables using these option:
+4 - Initialize your datatables using these option:
 
 ```javascript
 $('.datatable').dataTable({
@@ -116,28 +119,28 @@ $('.datatable').dataTable({
 
 ## Responsive Installation
 
-1. Complete steps 1-3 of the General Installation
-1. Add the lodash gem to your application:
+1 - Complete steps 1-3 of the General Installation
+2 - Add the lodash gem to your application:
 
 ```ruby
 gem 'lodash-rails'
 ```
 
-1. Add some more JavaScript to `application.js`:
+3 - Add some more JavaScript to `application.js`:
 
 ```javascript
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require dataTables/extras/dataTables.responsive
 ```
 
-1. Add this (and only this) stylesheet to `application.css`:
+4 - Add this (and only this) stylesheet to `application.css`:
 
 ```css
 *= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 *= require dataTables/extras/dataTables.responsive
 ```
 
-1. Initialize your datatables using:
+5 - Initialize your datatables using:
 
 ```coffeescript
 responsiveHelper = undefined
@@ -163,7 +166,7 @@ tableElement.dataTable
     return
 ```
 
-1. To use see the author of responsive files and follow the instructions as described on [datatables-responsive]
+6 - To use see the author of responsive files and follow the instructions as described on [datatables-responsive]
 
 ## Plugins
 
@@ -183,7 +186,7 @@ These files can be found in the [assets directory][assets].
 
 ## Extras
 
-Only the official extras are available:
+Official extras are available:
 
 * AutoFill
 * ColReorder
@@ -194,13 +197,18 @@ Only the official extras are available:
 * Scroller
 * TableTools
 
-To add an extra into your application, add its JS file to `application.js` using the following pattern:
+Unofficial extra is available:
+* Responsive
+
+
+
+1 - To add an extra into your application, add its JS file to `application.js` using the following pattern:
 
 ```javascript
 //= require dataTables/extras/[ExtraName]
 ```
 
-Additionally, you may need to add any associated CSS files. For instance the TableTools extra requires
+2 - Additionally, you may need to add any associated CSS files. For instance the TableTools extra requires
 you to add the following two lines to your `application.css` file:
 
 ```css
@@ -208,7 +216,7 @@ you to add the following two lines to your `application.css` file:
 *= require dataTables/extras/TableTools_JUI
 ```
 
-TableTools also requires this to be included in 'application.js':
+3 - TableTools also requires this to be included in 'application.js':
 
 ```javascript
 //= require dataTables/extras/ZeroClipboard.js
