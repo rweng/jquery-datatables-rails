@@ -192,8 +192,8 @@ These files can be found in the [assets directory][assets].
 
 ## Extras
 
-Official extras are available:
 ````ruby
+# Official extras are available:
 [Plugin]     : [ExtraName]
 AutoFill     : dataTables.autoFill
 ColReorder   : dataTables.colReorder
@@ -203,10 +203,8 @@ FixedHeader  : dataTables.fixedHeader
 KeyTable     : dataTables.keyTable
 Scroller     : dataTables.scroller
 TableTools   : dataTables.tableTools
-````
 
-Unofficial extra is available:
-````
+# Unofficial extra is available:
 Responsive   : dataTables.responsive
 ````
 
