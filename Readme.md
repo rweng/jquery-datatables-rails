@@ -43,7 +43,8 @@ bundle install
 
 ## Twitter Bootstrap 2 Installation
 
-1 - Complete steps 1-3 of the General Installation
+1 - Complete steps 1-3 of the General Installation.
+
 2 - Add some more JavaScript to `application.js`:
 
 ```javascript
