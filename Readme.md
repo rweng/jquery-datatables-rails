@@ -193,7 +193,7 @@ These files can be found in the [assets directory][assets].
 ## Extras
 
 Official extras are available:
-````
+````ruby
 [Plugin]     : [ExtraName]
 AutoFill     : dataTables.autoFill
 ColReorder   : dataTables.colReorder
