@@ -86,7 +86,7 @@ $('.datatable').dataTable({
 3 - Add this (and only this) stylesheet to `application.css`:
 
 ```css
-*= require dataTables/bootstrap/3jquery.dataTables.bootstrap3
+*= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 ```
 
 4 - Initialize your datatables using these option:
