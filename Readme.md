@@ -193,18 +193,22 @@ These files can be found in the [assets directory][assets].
 ## Extras
 
 Official extras are available:
-
-* AutoFill
-* ColReorder
-* ColVis
-* FixedColumns
-* FixedHeader
-* KeyTable
-* Scroller
-* TableTools
+````
+[Plugin]     : [ExtraName]
+AutoFill     : dataTables.autoFill
+ColReorder   : dataTables.colReorder
+ColVis       : dataTables.colVis
+FixedColumns : dataTables.fixedColumn
+FixedHeader  : dataTables.fixedHeader
+KeyTable     : dataTables.keyTable
+Scroller     : dataTables.scroller
+TableTools   : dataTables.tableTools
+````
 
 Unofficial extra is available:
-* Responsive
+````
+Responsive   : dataTables.responsive
+````
 
 ### How to use Extras
 1 - To add an extra into your application, add its JS file to `application.js` using the following pattern:
