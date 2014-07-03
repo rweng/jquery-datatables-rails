@@ -15,12 +15,12 @@ If you encounter any errors, please fork the repository, update the plugin files
 
 ## General Installation
 
-**This is README is valid only for 2.1.10.0.1 version**
+**This is README is valid only for 2.1.10.0.2 version**
 
 1 - Add to your Gemfile:
 
 ```ruby
-gem 'jquery-datatables-rails', '~> 2.1.10.0.1'
+gem 'jquery-datatables-rails', '~> 2.1.10.0.2'
 ```
 
 2 - Install the gem:
@@ -43,7 +43,8 @@ bundle install
 
 ## Twitter Bootstrap 2 Installation
 
-1 - Complete steps 1-3 of the General Installation
+1 - Complete steps 1-3 of the General Installation.
+
 2 - Add some more JavaScript to `application.js`:
 
 ```javascript
@@ -74,7 +75,8 @@ $('.datatable').dataTable({
 
 ## Twitter Bootstrap 3 Installation
 
-1 - Complete steps 1-3 of the General Installation
+1 - Complete steps 1-3 of the General Installation.
+
 2 - Add some more JavaScript to `application.js`:
 
 ```javascript
@@ -84,7 +86,7 @@ $('.datatable').dataTable({
 3 - Add this (and only this) stylesheet to `application.css`:
 
 ```css
-*= require dataTables/bootstrap/3jquery.dataTables.bootstrap3
+*= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 ```
 
 4 - Initialize your datatables using these option:
@@ -122,7 +124,8 @@ $('.datatable').dataTable({
 
 ## Responsive Installation
 
-1 - Complete steps 1-3 of the General Installation
+1 - Complete steps 1-3 of the General Installation.
+
 2 - Add the lodash gem to your application:
 
 ```ruby
@@ -189,19 +192,21 @@ These files can be found in the [assets directory][assets].
 
 ## Extras
 
-Official extras are available:
+````ruby
+# Official extras are available:
+[Plugin]     : [ExtraName]
+AutoFill     : dataTables.autoFill
+ColReorder   : dataTables.colReorder
+ColVis       : dataTables.colVis
+FixedColumns : dataTables.fixedColumn
+FixedHeader  : dataTables.fixedHeader
+KeyTable     : dataTables.keyTable
+Scroller     : dataTables.scroller
+TableTools   : dataTables.tableTools
 
-* AutoFill
-* ColReorder
-* ColVis
-* FixedColumns
-* FixedHeader
-* KeyTable
-* Scroller
-* TableTools
-
-Unofficial extra is available:
-* Responsive
+# Unofficial extra is available:
+Responsive   : dataTables.responsive
+````
 
 ### How to use Extras
 1 - To add an extra into your application, add its JS file to `application.js` using the following pattern:
@@ -236,7 +241,7 @@ Make sure to also add it's initialization as described on [datatables extras' si
 
 Thanks to Comanche for responsive support files [datatables-responsive]
 
-[assets]: https://github.com/rweng/jquery-datatables-rails/tree/master/vendor/assets/javascripts/dataTables
+[assets]: app/assets/javascripts/dataTables
 [datatables_extras]: http://datatables.net/extras/
 [datatables-responsive]: https://github.com/Comanche/datatables-responsive
 [RailsCast #340 DataTables]: http://railscasts.com/episodes/340-datatables
