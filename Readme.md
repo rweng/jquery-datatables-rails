@@ -223,12 +223,6 @@ you to add the following two lines to your `application.css` file:
 *= require dataTables/extras/TableTools_JUI
 ```
 
-3 - TableTools also requires this to be included in 'application.js':
-
-```javascript
-//= require dataTables/extras/ZeroClipboard.js
-```
-
 Make sure to also add it's initialization as described on [datatables extras' site][datatables_extras]
 
 ## Articles and Extras
