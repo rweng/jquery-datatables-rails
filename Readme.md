@@ -216,20 +216,19 @@ Responsive   : dataTables.responsive
 ```
 
 2 - Additionally, you may need to add any associated CSS files. For instance the TableTools extra requires
-you to add the following two lines to your `application.css` file:
+you to add the following line to your `application.css` file:
 
 ```css
 *= require dataTables/extras/dataTables.tableTools
-*= require dataTables/extras/TableTools_JUI
 ```
 
-Make sure to also add it's initialization as described on [datatables extras' site][datatables_extras]
+Make sure to also add it's initialization as described on [datatables extras' site][datatables_extras].
 
 ## Articles and Extras
 
 [RailsCast #340 DataTables] Apr 11, 2012.
 
-[ajax-datatables-rails] a wrapper around datatable's ajax methods that allow synchronization with server-side
+[ajax-datatables-rails] a wrapper around datatable's ajax methods that allow synchronization with server-side.
 
 ## Thanks
 
