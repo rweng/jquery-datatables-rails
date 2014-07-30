@@ -15,12 +15,10 @@ If you encounter any errors, please fork the repository, update the plugin files
 
 ## General Installation
 
-**This is README is valid only for 2.1.10.0.3 version**
-
 1 - Add to your Gemfile:
 
 ```ruby
-gem 'jquery-datatables-rails', '~> 2.1.10.0.3'
+gem 'jquery-datatables-rails', '~> 2.1.10.0.4'
 ```
 
 2 - Install the gem:
