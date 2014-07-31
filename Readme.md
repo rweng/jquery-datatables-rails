@@ -92,6 +92,8 @@ $('.datatable').dataTable({
 ```javascript
 $('.datatable').dataTable({
   "sPaginationType": "full_numbers"
+  // Optional, if you want full pagination controls.
+  // Check dataTables documentation to learn more about available options.
 });
 ```
 
