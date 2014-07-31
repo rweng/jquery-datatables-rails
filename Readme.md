@@ -91,7 +91,7 @@ $('.datatable').dataTable({
 
 ```javascript
 $('.datatable').dataTable({
-  "sPaginationType": "bootstrap"
+  "sPaginationType": "full_numbers"
 });
 ```
 
