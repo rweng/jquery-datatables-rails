@@ -94,6 +94,7 @@ $('.datatable').dataTable({
   "pagingType": "full_numbers"
   // Optional, if you want full pagination controls.
   // Check dataTables documentation to learn more about available options.
+  // http://datatables.net/reference/option/pagingType
 });
 ```
 
@@ -112,14 +113,6 @@ $('.datatable').dataTable({
 
 ```css
 *= require dataTables/jquery.dataTables.foundation
-```
-
-4 - Initialize your datatables using these option:
-
-```javascript
-$('.datatable').dataTable({
-  "sPaginationType": "foundation"
-});
 ```
 
 ## Responsive Installation
