@@ -13,12 +13,14 @@ It provides all the basic DataTables files, and a few of the extras.
 
 If you encounter any errors, please fork the repository, update the plugin files and send a pull-request.
 
+**Take care, jQuery DataTables renamed the parameters name**
+
 ## General Installation
 
 1 - Add to your Gemfile:
 
 ```ruby
-gem 'jquery-datatables-rails', '~> 2.1.10.0.4'
+gem 'jquery-datatables-rails', '~> 2.2.0'
 ```
 
 2 - Install the gem:
@@ -91,7 +93,12 @@ $('.datatable').dataTable({
 
 ```javascript
 $('.datatable').dataTable({
-  "pagingType": "full_numbers"
+  // ajax: ...,
+  // autoWidth: false,
+  // pagingType: 'full_numbers',
+  // processing: true,
+  // serverSide: true,
+
   // Optional, if you want full pagination controls.
   // Check dataTables documentation to learn more about available options.
   // http://datatables.net/reference/option/pagingType

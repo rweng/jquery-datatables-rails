@@ -1,7 +1,19 @@
-## 2.1.10.0.4
+## 2.2.0
+  - only changed version to respect the semver.org.
+  - this version it is equal to 2.1.10.0.4
+
+## 2.1.10.0.4 (yeanked)
 
 Features:
   - updated bootstrap 3 javascritp and stylesheet
+
+## 2.1.10.0.3
+Bugfixies:
+  - remove TableTools_JUI.css file from project
+  - merged pull request #111
+
+Bugfixies:
+  - moved jquery-datatatables.bootstrap.js to correct folder (bootstrap/2)
 
 ## 2.1.10.0.2
 
