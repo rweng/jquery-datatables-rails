@@ -6,7 +6,7 @@
   - this version it is equal to 2.1.10.0.4
   - it is incompatible with 2.10.0.3, because jQuery DataTables Bootstrap 3 pluging respected the new parameters name from DataTables 1.10.x
 
-## 2.1.10.0.4 (yeanked)
+## 2.1.10.0.4 (yanked)
 
 Features:
   - updated bootstrap 3 javascritp and stylesheet
