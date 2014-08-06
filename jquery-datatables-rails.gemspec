@@ -21,5 +21,3 @@ Gem::Specification.new do |s|
 
   s.add_dependency "sass-rails"
 end
-
-

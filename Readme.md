@@ -20,7 +20,7 @@ If you encounter any errors, please fork the repository, update the plugin files
 1 - Add to your Gemfile:
 
 ```ruby
-gem 'jquery-datatables-rails', '~> 2.2.0'
+gem 'jquery-datatables-rails', '~> 2.2.1'
 ```
 
 2 - Install the gem:

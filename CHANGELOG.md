@@ -1,3 +1,6 @@
+## 2.2.1
+  - updated jQuery DataTables to 1.10.2
+
 ## 2.2.0
   - only changed version to respect the semver.org.
   - this version it is equal to 2.1.10.0.4
