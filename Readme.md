@@ -13,7 +13,7 @@ It provides all the basic DataTables files, and a few of the extras.
 
 If you encounter any errors, please fork the repository, update the plugin files and send a pull-request.
 
-**Take care, jQuery DataTables renamed the parameters name**
+**Take care, jQuery DataTables renamed the parameters names**
 
 ## General Installation
 
