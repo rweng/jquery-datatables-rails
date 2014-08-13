@@ -1,11 +1,11 @@
-/*! ColVis 1.1.0
+/*! ColVis 1.1.1
  * ©2010-2014 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     ColVis
  * @description Controls for column visibility in DataTables
- * @version     1.1.0
+ * @version     1.1.1
  * @file        dataTables.colReorder.js
  * @author      SpryMedia Ltd (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
@@ -463,8 +463,15 @@ ColVis.prototype = {
 
 		if ( this.s.showAll )
 		{
-			nButton = this._fnDomShowAllButton();
+			nButton = this._fnDomShowXButton( this.s.showAll, true );
 			nButton.className += " ColVis_ShowAll";
+			this.dom.buttons.push( nButton );
+		}
+
+		if ( this.s.showNone )
+		{
+			nButton = this._fnDomShowXButton( this.s.showNone, false );
+			nButton.className += " ColVis_ShowNone";
 			this.dom.buttons.push( nButton );
 		}
 
@@ -502,12 +509,12 @@ ColVis.prototype = {
 
 
 	/**
-	 * Create a button which allows a "show all" action
-	 *  @method  _fnDomShowAllButton
+	 * Create a button which allows show all and show node actions
+	 *  @method  _fnDomShowXButton
 	 *  @returns {Node} Created button
 	 *  @private
 	 */
-	"_fnDomShowAllButton": function ()
+	"_fnDomShowXButton": function ( str, action )
 	{
 		var
 			that = this,
@@ -515,7 +522,7 @@ ColVis.prototype = {
 
 		return $(
 				'<li class="ColVis_Special '+(dt.bJUI ? 'ui-button ui-state-default' : '')+'">'+
-					this.s.showAll+
+					str+
 				'</li>'
 			)
 			.click( function (e) {
@@ -523,7 +530,7 @@ ColVis.prototype = {
 				{
 					if (that.s.aiExclude.indexOf(i) === -1)
 					{
-						that.s.dt.oInstance.fnSetColumnVis( i, true, false );
+						that.s.dt.oInstance.fnSetColumnVis( i, action, false );
 					}
 				}
 				that._fnAdjustOpenRows();
@@ -627,7 +634,7 @@ ColVis.prototype = {
 
 				$.fn.dataTableExt.iApiIndex = oldIndex; /* Restore */
 
-				if ( that.s.fnStateChange !== null )
+				if ( e.target.nodeName.toLowerCase() === 'input' && that.s.fnStateChange !== null )
 				{
 					that.s.fnStateChange.call( that, i, showHide );
 				}
@@ -1039,7 +1046,7 @@ ColVis.prototype.CLASS = "ColVis";
  *  @type      String
  *  @default   See code
  */
-ColVis.VERSION = "1.1.0";
+ColVis.VERSION = "1.1.1";
 ColVis.prototype.VERSION = ColVis.VERSION;
 
 
@@ -1084,7 +1091,11 @@ return ColVis;
 
 // Define as an AMD module if possible
 if ( typeof define === 'function' && define.amd ) {
-	define( 'datatables-colvis', ['jquery', 'datatables'], factory );
+	define( ['jquery', 'datatables'], factory );
+}
+else if ( typeof exports === 'object' ) {
+    // Node/CommonJS
+    factory( require('jquery'), require('datatables') );
 }
 else if ( jQuery && !jQuery.fn.dataTable.ColVis ) {
 	// Otherwise simply initialise as normal, stopping multiple evaluation
