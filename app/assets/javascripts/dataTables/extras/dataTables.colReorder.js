@@ -1,11 +1,11 @@
-/*! ColReorder 1.1.1
+/*! ColReorder 1.1.2
  * ©2010-2014 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     ColReorder
  * @description Provide the ability to reorder columns in a DataTable
- * @version     1.1.1
+ * @version     1.1.2
  * @file        dataTables.colReorder.js
  * @author      SpryMedia Ltd (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
@@ -111,6 +111,20 @@ $.fn.dataTableExt.oApi.fnColReorder = function ( oSettings, iFrom, iTo )
 {
 	var v110 = $.fn.dataTable.Api ? true : false;
 	var i, iLen, j, jLen, iCols=oSettings.aoColumns.length, nTrs, oCol;
+	var attrMap = function ( obj, prop, mapping ) {
+		if ( ! obj[ prop ] ) {
+			return;
+		}
+
+		var a = obj[ prop ].split('.');
+		var num = a.shift();
+
+		if ( isNaN( num*1 ) ) {
+			return;
+		}
+
+		obj[ prop ] = mapping[ num*1 ]+'.'+a.join('.');
+	};
 
 	/* Sanity check in the input */
 	if ( iFrom == iTo )
@@ -187,8 +201,19 @@ $.fn.dataTableExt.oApi.fnColReorder = function ( oSettings, iFrom, iTo )
 	for ( i=0, iLen=iCols ; i<iLen ; i++ )
 	{
 		oCol = oSettings.aoColumns[i];
+
 		if ( typeof oCol.mData == 'number' ) {
 			oCol.mData = aiInvertMapping[ oCol.mData ];
+
+			// regenerate the get / set functions
+			oSettings.oApi._fnColumnOptions( oSettings, i, {} );
+		}
+		else if ( $.isPlainObject( oCol.mData ) ) {
+			// HTML5 data sourced
+			attrMap( oCol.mData, '_',      aiInvertMapping );
+			attrMap( oCol.mData, 'filter', aiInvertMapping );
+			attrMap( oCol.mData, 'sort',   aiInvertMapping );
+			attrMap( oCol.mData, 'type',   aiInvertMapping );
 
 			// regenerate the get / set functions
 			oSettings.oApi._fnColumnOptions( oSettings, i, {} );
@@ -366,8 +391,10 @@ var ColReorder = function( dt, opts )
 	}
 
 	// Convert from camelCase to Hungarian, just as DataTables does
-	if ( $.fn.dataTable.camelToHungarian ) {
-		$.fn.dataTable.camelToHungarian( ColReorder.defaults, opts || {} );
+	var camelToHungarian = $.fn.dataTable.camelToHungarian;
+	if ( camelToHungarian ) {
+		camelToHungarian( ColReorder.defaults, ColReorder.defaults, true );
+		camelToHungarian( ColReorder.defaults, opts || {} );
 	}
 
 
@@ -732,28 +759,51 @@ ColReorder.prototype = {
 	{
 		var i, iLen, aCopy, iOrigColumn;
 		var oSettings = this.s.dt;
+		var columns = oSettings.aoColumns;
 
-		/* Sorting */
-		for ( i=0 ; i<oState.aaSorting.length ; i++ )
-		{
-			oState.aaSorting[i][0] = oSettings.aoColumns[ oState.aaSorting[i][0] ]._ColReorder_iOrigCol;
-		}
-
-		var aSearchCopy = $.extend( true, [], oState.aoSearchCols );
 		oState.ColReorder = [];
 
-		for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
-		{
-			iOrigColumn = oSettings.aoColumns[i]._ColReorder_iOrigCol;
+		/* Sorting */
+		if ( oState.aaSorting ) {
+			// 1.10.0-
+			for ( i=0 ; i<oState.aaSorting.length ; i++ ) {
+				oState.aaSorting[i][0] = columns[ oState.aaSorting[i][0] ]._ColReorder_iOrigCol;
+			}
 
-			/* Column filter */
-			oState.aoSearchCols[ iOrigColumn ] = aSearchCopy[i];
+			var aSearchCopy = $.extend( true, [], oState.aoSearchCols );
 
-			/* Visibility */
-			oState.abVisCols[ iOrigColumn ] = oSettings.aoColumns[i].bVisible;
+			for ( i=0, iLen=columns.length ; i<iLen ; i++ )
+			{
+				iOrigColumn = columns[i]._ColReorder_iOrigCol;
 
-			/* Column reordering */
-			oState.ColReorder.push( iOrigColumn );
+				/* Column filter */
+				oState.aoSearchCols[ iOrigColumn ] = aSearchCopy[i];
+
+				/* Visibility */
+				oState.abVisCols[ iOrigColumn ] = columns[i].bVisible;
+
+				/* Column reordering */
+				oState.ColReorder.push( iOrigColumn );
+			}
+		}
+		else if ( oState.order ) {
+			// 1.10.1+
+			for ( i=0 ; i<oState.order.length ; i++ ) {
+				oState.order[i][0] = columns[ oState.order[i][0] ]._ColReorder_iOrigCol;
+			}
+
+			var stateColumnsCopy = $.extend( true, [], oState.columns );
+
+			for ( i=0, iLen=columns.length ; i<iLen ; i++ )
+			{
+				iOrigColumn = columns[i]._ColReorder_iOrigCol;
+
+				/* Columns */
+				oState.columns[ iOrigColumn ] = stateColumnsCopy[i];
+
+				/* Column reordering */
+				oState.ColReorder.push( iOrigColumn );
+			}
 		}
 	},
 
@@ -1236,7 +1286,7 @@ ColReorder.defaults = {
  *  @type      String
  *  @default   As code
  */
-ColReorder.version = "1.1.1";
+ColReorder.version = "1.1.2";
 
 
 
@@ -1306,7 +1356,11 @@ return ColReorder;
 
 // Define as an AMD module if possible
 if ( typeof define === 'function' && define.amd ) {
-	define( 'datatables-colreorder', ['jquery', 'datatables'], factory );
+	define( ['jquery', 'datatables'], factory );
+}
+else if ( typeof exports === 'object' ) {
+    // Node/CommonJS
+    factory( require('jquery'), require('datatables') );
 }
 else if ( jQuery && !jQuery.fn.dataTable.ColReorder ) {
 	// Otherwise simply initialise as normal, stopping multiple evaluation
