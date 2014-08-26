@@ -13,7 +13,7 @@ jQuery.fn.dataTableExt.oApi.fnSetFilteringDelay = function ( oSettings, iDelay )
             sPreviousSearch = null,
             anControl = $( 'input', _that.fnSettings().aanFeatures.f );
 
-        anControl.unbind( 'keyup' ).bind( 'keyup', function() {
+            anControl.off( 'keyup search input' ).on( 'keyup search input', function() {
             var $$this = $this;
 
             if (sPreviousSearch === null || sPreviousSearch != anControl.val()) {
