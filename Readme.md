@@ -9,11 +9,10 @@ It provides all the basic DataTables files, and a few of the extras.
 # Important
 
 **The current gem is released without updated plugins.**
-**Take care of using the gem from master repository, there are general changes. [CHANGELOG.md](CHANGELOG.md)**
+
+**Take care, jQuery DataTables renamed the parameters names, if you are updating, please take a look http://www.datatables.net/upgrade/1.10-convert**
 
 If you encounter any errors, please fork the repository, update the plugin files and send a pull-request.
-
-**Take care, jQuery DataTables renamed the parameters names**
 
 ## General Installation
 
