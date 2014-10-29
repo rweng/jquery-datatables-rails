@@ -1,7 +1,4 @@
 ### 3.0.0
-  - it is equal to 2.3.0
-
-### 2.3.0
   - updated Bootstrap 2 css plugin
   - updated jQuery DataTable to 1.10.3, .dataTable() method was renamed to .DataTable()
   - changed Commanche responsive plugin to DataTable Responsive plugin, it will break the backward compatibility, please see the Responsive section at Readme.  
