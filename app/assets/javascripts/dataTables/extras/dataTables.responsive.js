@@ -1,650 +1,801 @@
+/*! Responsive 1.0.2
+ * 2014 SpryMedia Ltd - datatables.net/license
+ */
+
 /**
- * File:        datatables.responsive.js
- * Version:     0.2.0
- * Author:      Seen Sai Yang
- * Info:        https://github.com/Comanche/datatables-responsive
+ * @summary     Responsive
+ * @description Responsive tables plug-in for DataTables
+ * @version     1.0.2
+ * @file        dataTables.responsive.js
+ * @author      SpryMedia Ltd (www.sprymedia.co.uk)
+ * @contact     www.sprymedia.co.uk/contact
+ * @copyright   Copyright 2014 SpryMedia Ltd.
  *
- * Copyright 2013 Seen Sai Yang, all rights reserved.
- *
- * This source file is free software, under either the GPL v2 license or a
- * BSD style license.
+ * This source file is free software, available under the following license:
+ *   MIT license - http://datatables.net/license/mit
  *
  * This source file is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
  * or FITNESS FOR A PARTICULAR PURPOSE. See the license files for details.
  *
- * You should have received a copy of the GNU General Public License and the
- * BSD license along with this program.  These licenses are also available at:
- *     https://raw.github.com/Comanche/datatables-responsive/master/license-gpl2.txt
- *     https://raw.github.com/Comanche/datatables-responsive/master/license-bsd.txt
+ * For details please refer to: http://www.datatables.net
  */
 
-'use strict';
+(function(window, document, undefined) {
+
+
+var factory = function( $, DataTable ) {
+"use strict";
 
 /**
- * Constructor for responsive datables helper.
+ * Responsive is a plug-in for the DataTables library that makes use of
+ * DataTables' ability to change the visibility of columns, changing the
+ * visibility of columns so the displayed columns fit into the table container.
+ * The end result is that complex tables will be dynamically adjusted to fit
+ * into the viewport, be it on a desktop, tablet or mobile browser.
  *
- * This helper class makes datatables responsive to the window size.
+ * Responsive for DataTables has two modes of operation, which can used
+ * individually or combined:
  *
- * The parameter, breakpoints, is an object for each breakpoint key/value pair
- * with the following format: { breakpoint_name: pixel_width_at_breakpoint }.
+ * * Class name based control - columns assigned class names that match the
+ *   breakpoint logic can be shown / hidden as required for each breakpoint.
+ * * Automatic control - columns are automatically hidden when there is no
+ *   room left to display them. Columns removed from the right.
  *
- * An example is as follows:
+ * In additional to column visibility control, Responsive also has built into
+ * options to use DataTables' child row display to show / hide the information
+ * from the table that has been hidden. There are also two modes of operation
+ * for this child row display:
  *
- *     {
- *         tablet: 1024,
- *         phone: 480
- *     }
+ * * Inline - when the control element that the user can use to show / hide
+ *   child rows is displayed inside the first column of the table.
+ * * Column - where a whole column is dedicated to be the show / hide control.
  *
- * These breakpoint name may be used as possible values for the data-hide
- * attribute.  The data-hide attribute is optional and may be defined for each
- * th element in the table header.
+ * Initialisation of Responsive is performed by:
  *
- * The parameter, options, is an object of options supported by the responsive
- * helper.  The following options are supported:
+ * * Adding the class `responsive` or `dt-responsive` to the table. In this case
+ *   Responsive will automatically be initialised with the default configuration
+ *   options when the DataTable is created.
+ * * Using the `responsive` option in the DataTables configuration options. This
+ *   can also be used to specify the configuration options, or simply set to
+ *   `true` to use the defaults.
  *
- *     {
- *          hideEmptyColumnsInRowDetail - Boolean, default: false.
- *          clickOn                     - icon|cell|row, default: icon
- *          showDetail                  - function called when detail row shown
- *          hideDetail                  - function called when detail row hidden
- *     }
+ *  @class
+ *  @param {object} settings DataTables settings object for the host table
+ *  @param {object} [opts] Configuration options
+ *  @requires jQuery 1.7+
+ *  @requires DataTables 1.10.1+
  *
- * @param {Object|string} tableSelector jQuery wrapped set or selector for
- *                                      datatables container element.
- * @param {Object} breakpoints          Object defining the responsive
- *                                      breakpoint for datatables.
- * @param {Object} options              Object of options.
+ *  @example
+ *      $('#example').DataTable( {
+ *        responsive: true
+ *      } );
+ *    } );
  */
-function ResponsiveDatatablesHelper(tableSelector, breakpoints, options) {
-    if (typeof tableSelector === 'string') {
-        this.tableElement = $(tableSelector);
-    } else {
-        this.tableElement = tableSelector;
-    }
+var Responsive = function ( settings, opts ) {
+	// Sanity check that we are using DataTables 1.10 or newer
+	if ( ! DataTable.versionCheck || ! DataTable.versionCheck( '1.10.1' ) ) {
+		throw 'DataTables Responsive requires DataTables 1.10.1 or newer';
+	}
 
-    // Get data table API.
-    this.api = this.tableElement.dataTable().api();
+	this.s = {
+		dt: new DataTable.Api( settings ),
+		columns: []
+	};
 
-    // State of column indexes and which are shown or hidden.
-    this.columnIndexes = [];
-    this.columnsShownIndexes = [];
-    this.columnsHiddenIndexes = [];
-    this.currentBreakpoint = '';
-    this.lastBreakpoint = '';
-    this.lastColumnsHiddenIndexes = [];
+	// Check if responsive has already been initialised on this table
+	if ( this.s.dt.settings()[0].responsive ) {
+		return;
+	}
 
-    // Save state
-    var fileName = window.location.pathname.split("/").pop();
-    var context = this.api.settings().context[0];
+	// details is an object, but for simplicity the user can give it as a string
+	if ( opts && typeof opts.details === 'string' ) {
+		opts.details = { type: opts.details };
+	}
 
-    this.tableId = context.sTableId;
-    this.saveState = context.oInit.bStateSave;
-    this.cookieName = 'DataTablesResponsiveHelper_' + this.tableId + (fileName ? '_' + fileName : '');
-    this.lastStateExists = false;
+	this.c = $.extend( true, {}, Responsive.defaults, DataTable.defaults.responsive, opts );
+	settings.responsive = this;
+	this._constructor();
+};
 
-    // Index of the th in the header tr that stores where the attribute
-    //     data-class="expand"
-    // is defined.
-    this.expandColumn = undefined;
-    // Stores original breakpoint defitions
-    this.origBreakpointsDefs = undefined;
-    // Stores the break points defined in the table header.
-    // Each th in the header tr may contain an optional attribute like
-    //     data-hide="phone,tablet"
-    // These attributes and the breakpoints object will be used to create this
-    // object.
-    this.breakpoints = {
-        /**
-         * We will be generating data in the following format:
-         *     phone : {
-         *         lowerLimit   : undefined,
-         *         upperLimit   : 320,
-         *         columnsToHide: []
-         *     },
-         *     tablet: {
-         *         lowerLimit   : 320,
-         *         upperLimit   : 724,
-         *         columnsToHide: []
-         *     }
-         */
-    };
+Responsive.prototype = {
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Constructor
+	 */
 
-    // Store default options
-    this.options = {
-        hideEmptyColumnsInRowDetail: false,
-        clickOn: 'icon',
-        showDetail: null,
-        hideDetail: null
-    };
+	/**
+	 * Initialise the Responsive instance
+	 *
+	 * @private
+	 */
+	_constructor: function ()
+	{
+		var that = this;
+		var dt = this.s.dt;
 
-    // Expand icon template
-    this.expandIconTemplate = '<span class="responsiveExpander"></span>';
+		dt.settings()[0]._responsive = this;
 
-    // Row template
-    this.rowTemplate = '<tr class="row-detail"><td><ul><!--column item--></ul></td></tr>';
-    this.rowLiTemplate = '<li><span class="columnTitle"><!--column title--></span>: <span class="columnValue"><!--column value--></span></li>';
+		// Use DataTables' private throttle function to avoid processor thrashing
+		$(window).on( 'resize.dtr orientationchange.dtr', dt.settings()[0].oApi._fnThrottle( function () {
+			that._resize();
+		} ) );
 
-    // Responsive behavior on/off flag
-    this.disabled = true;
+		// Destroy event handler
+		dt.on( 'destroy.dtr', function () {
+			$(window).off( 'resize.dtr orientationchange.dtr' );
+		} );
 
-    // Skip next windows width change flag
-    this.skipNextWindowsWidthChange = false;
+		// Reorder the breakpoints array here in case they have been added out
+		// of order
+		this.c.breakpoints.sort( function (a, b) {
+			return a.width < b.width ? 1 :
+				a.width > b.width ? -1 : 0;
+		} );
 
-    // Initialize settings
-    this.init(breakpoints, options);
+		// Determine which columns are already hidden, and should therefore
+		// remain hidden. TODO - should this be done? See thread 22677
+		//
+		// this.s.alwaysHidden = dt.columns(':hidden').indexes();
+
+		this._classLogic();
+		this._resizeAuto();
+
+		// First pass - draw the table for the current viewport size
+		this._resize();
+
+		// Details handler
+		var details = this.c.details;
+		if ( details.type ) {
+			that._detailsInit();
+			this._detailsVis();
+
+			dt.on( 'column-visibility.dtr', function () {
+				that._detailsVis();
+			} );
+
+			$(dt.table().node()).addClass( 'dtr-'+details.type );
+		}
+	},
+
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Private methods
+	 */
+
+	/**
+	 * Calculate the visibility for the columns in a table for a given
+	 * breakpoint. The result is pre-determined based on the class logic if
+	 * class names are used to control all columns, but the width of the table
+	 * is also used if there are columns which are to be automatically shown
+	 * and hidden.
+	 *
+	 * @param  {string} breakpoint Breakpoint name to use for the calculation
+	 * @return {array} Array of boolean values initiating the visibility of each
+	 *   column.
+	 *  @private
+	 */
+	_columnsVisiblity: function ( breakpoint )
+	{
+		var dt = this.s.dt;
+		var columns = this.s.columns;
+		var i, ien;
+
+		// Class logic - determine which columns are in this breakpoint based
+		// on the classes. If no class control (i.e. `auto`) then `-` is used
+		// to indicate this to the rest of the function
+		var display = $.map( columns, function ( col ) {
+			return col.auto && col.minWidth === null ?
+				false :
+				col.auto === true ?
+					'-' :
+					$.inArray( breakpoint, col.includeIn ) !== -1;
+		} );
+
+		// Auto column control - first pass: how much width is taken by the
+		// ones that must be included from the non-auto columns
+		var requiredWidth = 0;
+		for ( i=0, ien=display.length ; i<ien ; i++ ) {
+			if ( display[i] === true ) {
+				requiredWidth += columns[i].minWidth;
+			}
+		}
+
+		// Second pass, use up any remaining width for other columns
+		var widthAvailable = dt.table().container().offsetWidth;
+		var usedWidth = widthAvailable - requiredWidth;
+
+		for ( i=0, ien=display.length ; i<ien ; i++ ) {
+			// Control column needs to always be included. This makes it sub-
+			// optimal in terms of using the available with, but to stop layout
+			// thrashing or overflow
+			if ( columns[i].control ) {
+				usedWidth -= columns[i].minWidth;
+			}
+			else if ( display[i] === '-' ) {
+				// Otherwise, remove the width
+				display[i] = usedWidth - columns[i].minWidth < 0 ?
+					false :
+					true;
+
+				// Continue counting down the width, so a smaller column to the
+				// left won't be shown
+				usedWidth -= columns[i].minWidth;
+			}
+		}
+
+		// Determine if the 'control' column should be shown (if there is one).
+		// This is the case when there is a hidden column (that is not the
+		// control column). The two loops look inefficient here, but they are
+		// trivial and will fly through. We need to know the outcome from the
+		// first , before the action in the second can be taken
+		var showControl = false;
+
+		for ( i=0, ien=columns.length ; i<ien ; i++ ) {
+			if ( ! columns[i].control && ! columns[i].never && ! display[i] ) {
+				showControl = true;
+				break;
+			}
+		}
+
+		for ( i=0, ien=columns.length ; i<ien ; i++ ) {
+			if ( columns[i].control ) {
+				display[i] = showControl;
+			}
+		}
+
+		// Finally we need to make sure that there is at least one column that
+		// is visible
+		if ( $.inArray( true, display ) === -1 ) {
+			display[0] = true;
+		}
+
+		return display;
+	},
+
+
+	/**
+	 * Create the internal `columns` array with information about the columns
+	 * for the table. This includes determining which breakpoints the column
+	 * will appear in, based upon class names in the column, which makes up the
+	 * vast majority of this method.
+	 *
+	 * @private
+	 */
+	_classLogic: function ()
+	{
+		var that = this;
+		var calc = {};
+		var breakpoints = this.c.breakpoints;
+		var columns = this.s.dt.columns().eq(0).map( function (i) {
+			var className = this.column(i).header().className;
+
+			return {
+				className: className,
+				includeIn: [],
+				auto:      false,
+				control:   false,
+				never:     className.match(/\bnever\b/) ? true : false
+			};
+		} );
+
+		// Simply add a breakpoint to `includeIn` array, ensuring that there are
+		// no duplicates
+		var add = function ( colIdx, name ) {
+			var includeIn = columns[ colIdx ].includeIn;
+
+			if ( $.inArray( name, includeIn ) === -1 ) {
+				includeIn.push( name );
+			}
+		};
+
+		var column = function ( colIdx, name, operator, matched ) {
+			var size, i, ien;
+
+			if ( ! operator ) {
+				columns[ colIdx ].includeIn.push( name );
+			}
+			else if ( operator === 'max-' ) {
+				// Add this breakpoint and all smaller
+				size = that._find( name ).width;
+
+				for ( i=0, ien=breakpoints.length ; i<ien ; i++ ) {
+					if ( breakpoints[i].width <= size ) {
+						add( colIdx, breakpoints[i].name );
+					}
+				}
+			}
+			else if ( operator === 'min-' ) {
+				// Add this breakpoint and all larger
+				size = that._find( name ).width;
+
+				for ( i=0, ien=breakpoints.length ; i<ien ; i++ ) {
+					if ( breakpoints[i].width >= size ) {
+						add( colIdx, breakpoints[i].name );
+					}
+				}
+			}
+			else if ( operator === 'not-' ) {
+				// Add all but this breakpoint (xxx need extra information)
+
+				for ( i=0, ien=breakpoints.length ; i<ien ; i++ ) {
+					if ( breakpoints[i].name.indexOf( matched ) === -1 ) {
+						add( colIdx, breakpoints[i].name );
+					}
+				}
+			}
+		};
+
+		// Loop over each column and determine if it has a responsive control
+		// class
+		columns.each( function ( col, i ) {
+			var classNames = col.className.split(' ');
+			var hasClass = false;
+
+			// Split the class name up so multiple rules can be applied if needed
+			for ( var k=0, ken=classNames.length ; k<ken ; k++ ) {
+				var className = $.trim( classNames[k] );
+
+				if ( className === 'all' ) {
+					// Include in all
+					hasClass = true;
+					col.includeIn = $.map( breakpoints, function (a) {
+						return a.name;
+					} );
+					return;
+				}
+				else if ( className === 'none' || className === 'never' ) {
+					// Include in none (default) and no auto
+					hasClass = true;
+					return;
+				}
+				else if ( className === 'control' ) {
+					// Special column that is only visible, when one of the other
+					// columns is hidden. This is used for the details control
+					hasClass = true;
+					col.control = true;
+					return;
+				}
+
+				$.each( breakpoints, function ( j, breakpoint ) {
+					// Does this column have a class that matches this breakpoint?
+					var brokenPoint = breakpoint.name.split('-');
+					var re = new RegExp( '(min\\-|max\\-|not\\-)?('+brokenPoint[0]+')(\\-[_a-zA-Z0-9])?' );
+					var match = className.match( re );
+
+					if ( match ) {
+						hasClass = true;
+
+						if ( match[2] === brokenPoint[0] && match[3] === '-'+brokenPoint[1] ) {
+							// Class name matches breakpoint name fully
+							column( i, breakpoint.name, match[1], match[2]+match[3] );
+						}
+						else if ( match[2] === brokenPoint[0] && ! match[3] ) {
+							// Class name matched primary breakpoint name with no qualifier
+							column( i, breakpoint.name, match[1], match[2] );
+						}
+					}
+				} );
+			}
+
+			// If there was no control class, then automatic sizing is used
+			if ( ! hasClass ) {
+				col.auto = true;
+			}
+		} );
+
+		this.s.columns = columns;
+	},
+
+
+	/**
+	 * Initialisation for the details handler
+	 *
+	 * @private
+	 */
+	_detailsInit: function ()
+	{
+		var that    = this;
+		var dt      = this.s.dt;
+		var details = this.c.details;
+
+		// The inline type always uses the first child as the target
+		if ( details.type === 'inline' ) {
+			details.target = 'td:first-child';
+		}
+
+		// type.target can be a string jQuery selector or a column index
+		var target   = details.target;
+		var selector = typeof target === 'string' ? target : 'td';
+
+		// Click handler to show / hide the details rows when they are available
+		$( dt.table().body() ).on( 'click', selector, function (e) {
+			// If the table is not collapsed (i.e. there is no hidden columns)
+			// then take no action
+			if ( ! $(dt.table().node()).hasClass('collapsed' ) ) {
+				return;
+			}
+
+			// Check that the row is actually a DataTable's controlled node
+			if ( ! dt.row( $(this).closest('tr') ).length ) {
+				return;
+			}
+
+			// For column index, we determine if we should act or not in the
+			// handler - otherwise it is already okay
+			if ( typeof target === 'number' ) {
+				var targetIdx = target < 0 ?
+					dt.columns().eq(0).length + target :
+					target;
+
+				if ( dt.cell( this ).index().column !== targetIdx ) {
+					return;
+				}
+			}
+
+			// $().closest() includes itself in its check
+			var row = dt.row( $(this).closest('tr') );
+
+			if ( row.child.isShown() ) {
+				row.child( false );
+				$( row.node() ).removeClass( 'parent' );
+			}
+			else {
+				var info = that.c.details.renderer( dt, row[0] );
+				row.child( info, 'child' ).show();
+				$( row.node() ).addClass( 'parent' );
+			}
+		} );
+	},
+
+
+	/**
+	 * Update the child rows in the table whenever the column visibility changes
+	 *
+	 * @private
+	 */
+	_detailsVis: function ()
+	{
+		var that = this;
+		var dt = this.s.dt;
+
+		// Find how many columns are hidden
+		var hiddenColumns = dt.columns().indexes().filter( function ( idx ) {
+			var col = dt.column( idx );
+
+			if ( col.visible() ) {
+				return null;
+			}
+
+			// Only counts as hidden if it doesn't have the `never` class
+			return $( col.header() ).hasClass( 'never' ) ? null : idx;
+		} );
+		var haveHidden = true;
+
+		if ( hiddenColumns.length === 0 || ( hiddenColumns.length === 1 && this.s.columns[ hiddenColumns[0] ].control ) ) {
+			haveHidden = false;
+		}
+
+		if ( haveHidden ) {
+			// Got hidden columns
+			$( dt.table().node() ).addClass('collapsed');
+
+			// Show all existing child rows
+			dt.rows().eq(0).each( function (idx) {
+				var row = dt.row( idx );
+
+				if ( row.child() ) {
+					var info = that.c.details.renderer( dt, row[0] );
+
+					// The renderer can return false to have no child row
+					if ( info === false ) {
+						row.child.hide();
+					}
+					else {
+						row.child( info, 'child' ).show();
+					}
+				}
+			} );
+		}
+		else {
+			// No hidden columns
+			$( dt.table().node() ).removeClass('collapsed');
+
+			// Hide all existing child rows
+			dt.rows().eq(0).each( function (idx) {
+				dt.row( idx ).child.hide();
+			} );
+		}
+	},
+
+
+	/**
+	 * Find a breakpoint object from a name
+	 * @param  {string} name Breakpoint name to find
+	 * @return {object}      Breakpoint description object
+	 */
+	_find: function ( name )
+	{
+		var breakpoints = this.c.breakpoints;
+
+		for ( var i=0, ien=breakpoints.length ; i<ien ; i++ ) {
+			if ( breakpoints[i].name === name ) {
+				return breakpoints[i];
+			}
+		}
+	},
+
+
+	/**
+	 * Alter the table display for a resized viewport. This involves first
+	 * determining what breakpoint the window currently is in, getting the
+	 * column visibilities to apply and then setting them.
+	 *
+	 * @private
+	 */
+	_resize: function ()
+	{
+		var dt = this.s.dt;
+		var width = $(window).width();
+		var breakpoints = this.c.breakpoints;
+		var breakpoint = breakpoints[0].name;
+
+		// Determine what breakpoint we are currently at
+		for ( var i=breakpoints.length-1 ; i>=0 ; i-- ) {
+			if ( width <= breakpoints[i].width ) {
+				breakpoint = breakpoints[i].name;
+				break;
+			}
+		}
+		
+		// Show the columns for that break point
+		var columns = this._columnsVisiblity( breakpoint );
+
+		dt.columns().eq(0).each( function ( colIdx, i ) {
+			dt.column( colIdx ).visible( columns[i] );
+		} );
+	},
+
+
+	/**
+	 * Determine the width of each column in the table so the auto column hiding
+	 * has that information to work with. This method is never going to be 100%
+	 * perfect since column widths can change slightly per page, but without
+	 * seriously compromising performance this is quite effective.
+	 *
+	 * @private
+	 */
+	_resizeAuto: function ()
+	{
+		var dt = this.s.dt;
+		var columns = this.s.columns;
+
+		// Are we allowed to do auto sizing?
+		if ( ! this.c.auto ) {
+			return;
+		}
+
+		// Are there any columns that actually need auto-sizing, or do they all
+		// have classes defined
+		if ( $.inArray( true, $.map( columns, function (c) { return c.auto; } ) ) === -1 ) {
+			return;
+		}
+
+		// Clone the table with the current data in it
+		var tableWidth   = dt.table().node().offsetWidth;
+		var columnWidths = dt.columns;
+		var clonedTable  = dt.table().node().cloneNode( false );
+		var clonedHeader = $( dt.table().header().cloneNode( false ) ).appendTo( clonedTable );
+		var clonedBody   = $( dt.table().body().cloneNode( false ) ).appendTo( clonedTable );
+
+		// This is a bit slow, but we need to get a clone of each row that
+		// includes all columns. As such, try to do this as little as possible.
+		dt.rows( { page: 'current' } ).indexes().flatten().each( function ( idx ) {
+			var clone = dt.row( idx ).node().cloneNode( true );
+			
+			if ( dt.columns( ':hidden' ).flatten().length ) {
+				$(clone).append( dt.cells( idx, ':hidden' ).nodes().to$().clone() );
+			}
+
+			$(clone).appendTo( clonedBody );
+		} );
+
+		var cells        = dt.columns().header().to$().clone( false ).wrapAll('tr').appendTo( clonedHeader );
+		var inserted     = $('<div/>')
+			.css( {
+				width: 1,
+				height: 1,
+				overflow: 'hidden'
+			} )
+			.append( clonedTable )
+			.insertBefore( dt.table().node() );
+
+		// The cloned header now contains the smallest that each column can be
+		dt.columns().eq(0).each( function ( idx ) {
+			columns[idx].minWidth = cells[ idx ].offsetWidth || 0;
+		} );
+
+		inserted.remove();
+	}
+};
+
+
+/**
+ * List of default breakpoints. Each item in the array is an object with two
+ * properties:
+ *
+ * * `name` - the breakpoint name.
+ * * `width` - the breakpoint width
+ *
+ * @name Responsive.breakpoints
+ * @static
+ */
+Responsive.breakpoints = [
+	{ name: 'desktop',  width: Infinity },
+	{ name: 'tablet-l', width: 1024 },
+	{ name: 'tablet-p', width: 768 },
+	{ name: 'mobile-l', width: 480 },
+	{ name: 'mobile-p', width: 320 }
+];
+
+
+/**
+ * Responsive default settings for initialisation
+ *
+ * @namespace
+ * @name Responsive.defaults
+ * @static
+ */
+Responsive.defaults = {
+	/**
+	 * List of breakpoints for the instance. Note that this means that each
+	 * instance can have its own breakpoints. Additionally, the breakpoints
+	 * cannot be changed once an instance has been creased.
+	 *
+	 * @type {Array}
+	 * @default Takes the value of `Responsive.breakpoints`
+	 */
+	breakpoints: Responsive.breakpoints,
+
+	/**
+	 * Enable / disable auto hiding calculations. It can help to increase
+	 * performance slightly if you disable this option, but all columns would
+	 * need to have breakpoint classes assigned to them
+	 *
+	 * @type {Boolean}
+	 * @default  `true`
+	 */
+	auto: true,
+
+	/**
+	 * Details control. If given as a string value, the `type` property of the
+	 * default object is set to that value, and the defaults used for the rest
+	 * of the object - this is for ease of implementation.
+	 *
+	 * The object consists of the following properties:
+	 *
+	 * * `renderer` - function that is called for display of the child row data.
+	 *   The default function will show the data from the hidden columns
+	 * * `target` - Used as the selector for what objects to attach the child
+	 *   open / close to
+	 * * `type` - `false` to disable the details display, `inline` or `column`
+	 *   for the two control types
+	 *
+	 * @type {Object|string}
+	 */
+	details: {
+		renderer: function ( api, rowIdx ) {
+			var data = api.cells( rowIdx, ':hidden' ).eq(0).map( function ( cell ) {
+				var header = $( api.column( cell.column ).header() );
+				var idx = api.cell( cell ).index();
+
+				if ( header.hasClass( 'control' ) || header.hasClass( 'never' ) ) {
+					return '';
+				}
+
+				// Use a non-public DT API method to render the data for display
+				// This needs to be updated when DT adds a suitable method for
+				// this type of data retrieval
+				var dtPrivate = api.settings()[0];
+				var cellData = dtPrivate.oApi._fnGetCellData(
+					dtPrivate, idx.row, idx.column, 'display'
+				);
+
+				return '<li data-dtr-index="'+idx.column+'">'+
+						'<span class="dtr-title">'+
+							header.text()+':'+
+						'</span> '+
+						'<span class="dtr-data">'+
+							cellData+
+						'</span>'+
+					'</li>';
+			} ).toArray().join('');
+
+			return data ?
+				$('<ul data-dtr-index="'+rowIdx+'"/>').append( data ) :
+				false;
+		},
+
+		target: 0,
+
+		type: 'inline'
+	}
+};
+
+
+/*
+ * API
+ */
+var Api = $.fn.dataTable.Api;
+
+// Doesn't do anything - work around for a bug in DT... Not documented
+Api.register( 'responsive()', function () {
+	return this;
+} );
+
+Api.register( 'responsive.recalc()', function () {
+	this.iterator( 'table', function ( ctx ) {
+		if ( ctx._responsive ) {
+			ctx._responsive._resizeAuto();
+			ctx._responsive._resize();
+		}
+	} );
+} );
+
+Api.register( 'responsive.index()', function ( li ) {
+	li = $(li);
+
+	return {
+		column: li.data('dtr-index'),
+		row:    li.parent().data('dtr-index')
+	};
+} );
+
+
+/**
+ * Version information
+ *
+ * @name Responsive.version
+ * @static
+ */
+Responsive.version = '1.0.2';
+
+
+$.fn.dataTable.Responsive = Responsive;
+$.fn.DataTable.Responsive = Responsive;
+
+// Attach a listener to the document which listens for DataTables initialisation
+// events so we can automatically initialise
+$(document).on( 'init.dt.dtr', function (e, settings, json) {
+	if ( $(settings.nTable).hasClass( 'responsive' ) ||
+		 $(settings.nTable).hasClass( 'dt-responsive' ) ||
+		 settings.oInit.responsive ||
+		 DataTable.defaults.responsive
+	) {
+		var init = settings.oInit.responsive;
+
+		if ( init !== false ) {
+			new Responsive( settings, $.isPlainObject( init ) ? init : {}  );
+		}
+	}
+} );
+
+return Responsive;
+}; // /factory
+
+
+// Define as an AMD module if possible
+if ( typeof define === 'function' && define.amd ) {
+	define( ['jquery', 'datatables'], factory );
+}
+else if ( typeof exports === 'object' ) {
+    // Node/CommonJS
+    factory( require('jquery'), require('datatables') );
+}
+else if ( jQuery && !jQuery.fn.dataTable.Responsive ) {
+	// Otherwise simply initialise as normal, stopping multiple evaluation
+	factory( jQuery, jQuery.fn.dataTable );
 }
 
-/**
- * Responsive datatables helper init function.
- * Builds breakpoint limits for columns and begins to listen to window resize
- * event.
- *
- * See constructor for the breakpoints parameter.
- *
- * @param {Object} breakpoints
- * @param {Object} options
- */
-ResponsiveDatatablesHelper.prototype.init = function (breakpoints, options) {
-    this.origBreakpointsDefs = breakpoints;
-    this.initBreakpoints();
 
-    // Enable responsive behavior.
-    this.disable(false);
+})(window, document);
 
-    // Extend options
-    $.extend(this.options, options);
-};
-
-ResponsiveDatatablesHelper.prototype.initBreakpoints = function () {
-    // Get last state if it exists
-    if (this.saveState) {
-        this.getState();
-    }
-
-    if (!this.lastStateExists) {
-        /** Generate breakpoints in the format we need. ***********************/
-        // First, we need to create a sorted array of the breakpoints given.
-        var breakpointsSorted = [];
-
-        for (var prop in this.origBreakpointsDefs) {
-            breakpointsSorted.push({
-                name: prop,
-                upperLimit: this.origBreakpointsDefs[prop],
-                columnsToHide: []
-            });
-        }
-
-        breakpointsSorted.sort(function (a, b) {
-            return a.upperLimit - b.upperLimit;
-        });
-
-        // Set lower and upper limits for each breakpoint.
-        var lowerLimit = 0;
-        for (var i = 0; i < breakpointsSorted.length; i++) {
-            breakpointsSorted[i].lowerLimit = lowerLimit;
-            lowerLimit = breakpointsSorted[i].upperLimit;
-        }
-
-        // Add the default breakpoint which shows all (has no upper limit).
-        breakpointsSorted.push({
-            name         : 'always',
-            lowerLimit   : lowerLimit,
-            upperLimit   : Infinity,
-            columnsToHide: []
-        });
-
-        // Copy the sorted breakpoint array into the breakpoints object using the
-        // name as the key.
-        this.breakpoints = {};
-        var i, l;
-        for (i = 0, l = breakpointsSorted.length; i < l; i++) {
-            this.breakpoints[breakpointsSorted[i].name] = breakpointsSorted[i];
-        }
-
-        /** Create range of visible columns and their indexes *****************/
-        // We need the range of all visible column indexes to calculate the
-        // columns to show:
-        //     Columns to show = all visible columns - columns to hide
-        var columns = this.api.columns().header();
-        var visibleColumnsHeadersTds = [];
-        for (i = 0, l = columns.length; i < l; i++) {
-            if (this.api.column(i).visible()) {
-                this.columnIndexes.push(i);
-                visibleColumnsHeadersTds.push(columns[i]);
-            }
-        }
-
-        /** Sort columns into breakpoints respectively ************************/
-        // Read column headers' attributes and get needed info
-        for (var index = 0; index < visibleColumnsHeadersTds.length; index++) {
-            // Get the column with the attribute data-class="expand" so we know
-            // where to display the expand icon.
-            var col = $(visibleColumnsHeadersTds[index]);
-
-            if (col.attr('data-class') === 'expand') {
-                this.expandColumn = this.columnIndexes[index];
-            }
-
-            // The data-hide attribute has the breakpoints that this column
-            // is associated with.
-            // If it's defined, get the data-hide attribute and sort this
-            // column into the appropriate breakpoint's columnsToHide array.
-            var dataHide = col.attr('data-hide');
-            if (dataHide !== undefined) {
-                var splitBreakingPoints = dataHide.split(/,\s*/);
-                for (var i = 0; i < splitBreakingPoints.length; i++) {
-                    var bp = splitBreakingPoints[i];
-                    if (bp === 'always') {
-                        // A column with an 'always' breakpoint is always hidden.
-                        // Loop through all breakpoints and add it to each except the
-                        // default breakpoint.
-                        for (var prop in this.breakpoints) {
-                            if (this.breakpoints[prop].name !== 'default') {
-                                this.breakpoints[prop].columnsToHide.push(this.columnIndexes[index]);
-                            }
-                        }
-                    } else if (this.breakpoints[bp] !== undefined) {
-                        // Translate visible column index to internal column index.
-                        this.breakpoints[bp].columnsToHide.push(this.columnIndexes[index]);
-                    }
-                }
-            }
-        }
-    }
-};
-
-/**
- * Sets or removes window resize handler.
- *
- * @param {Boolean} bindFlag
- */
-ResponsiveDatatablesHelper.prototype.setWindowsResizeHandler = function(bindFlag) {
-    if (bindFlag === undefined) {
-        bindFlag = true;
-    }
-
-    if (bindFlag) {
-        var that = this;
-        $(window).bind("resize", function () {
-            that.respond();
-        });
-    } else {
-        $(window).unbind("resize");
-    }
-};
-
-/**
- * Respond window size change.  This helps make datatables responsive.
- */
-ResponsiveDatatablesHelper.prototype.respond = function () {
-    if (this.disabled) {
-        return;
-    }
-    var that = this;
-
-    // Get new windows width
-    var newWindowWidth = $(window).width();
-
-    // Loop through breakpoints to see which columns need to be shown/hidden.
-    var newColumnsToHide = [];
-
-    for (var prop in this.breakpoints) {
-        var element = this.breakpoints[prop];
-        if ((!element.lowerLimit || newWindowWidth > element.lowerLimit) && (!element.upperLimit || newWindowWidth <= element.upperLimit)) {
-            this.currentBreakpoint = element.name;
-            newColumnsToHide = element.columnsToHide;
-        }
-    }
-
-    // Find out if a column show/hide should happen.
-    // Skip column show/hide if this window width change follows immediately
-    // after a previous column show/hide.  This will help prevent a loop.
-    var columnShowHide = false;
-    if (!this.skipNextWindowsWidthChange) {
-        // Check difference in length
-        if (this.lastBreakpoint.length === 0 && newColumnsToHide.length) {
-            // No previous breakpoint and new breakpoint
-            columnShowHide = true;
-        } else if (this.lastBreakpoint != this.currentBreakpoint) {
-            // Different breakpoints
-            columnShowHide = true;
-        } else if (this.columnsHiddenIndexes.length !== newColumnsToHide.length) {
-            // Difference in number of hidden columns
-            columnShowHide = true;
-        } else {
-            // Possible same number of columns but check for difference in columns
-            var d1 = this.difference(this.columnsHiddenIndexes, newColumnsToHide).length;
-            var d2 = this.difference(newColumnsToHide, this.columnsHiddenIndexes).length;
-            columnShowHide = d1 + d2 > 0;
-        }
-    }
-
-    if (columnShowHide) {
-        // Showing/hiding a column at breakpoint may cause a windows width
-        // change.  Let's flag to skip the column show/hide that may be
-        // caused by the next windows width change.
-        this.skipNextWindowsWidthChange = true;
-        this.columnsHiddenIndexes = newColumnsToHide;
-        this.columnsShownIndexes = this.difference(this.columnIndexes, this.columnsHiddenIndexes);
-        this.showHideColumns();
-        this.lastBreakpoint = this.currentBreakpoint;
-        this.setState();
-        this.skipNextWindowsWidthChange = false;
-    }
-
-
-    // We don't skip this part.
-    // If one or more columns have been hidden, add the has-columns-hidden class to table.
-    // This class will show what state the table is in.
-    if (this.columnsHiddenIndexes.length) {
-        this.tableElement.addClass('has-columns-hidden');
-
-        // Show details for each row that is tagged with the class .detail-show.
-        $('tr.detail-show', this.tableElement).each(function (index, element) {
-            var tr = $(element);
-            if (tr.next('.row-detail').length === 0) {
-                ResponsiveDatatablesHelper.prototype.showRowDetail(that, tr);
-            }
-        });
-    } else {
-        this.tableElement.removeClass('has-columns-hidden');
-        $('tr.row-detail').each(function (event) {
-            ResponsiveDatatablesHelper.prototype.hideRowDetail(that, $(this).prev());
-        });
-    }
-};
-
-/**
- * Show/hide datatables columns.
- */
-ResponsiveDatatablesHelper.prototype.showHideColumns = function () {
-    // Calculate the columns to show
-    // Show columns that may have been previously hidden.
-    for (var i = 0, l = this.columnsShownIndexes.length; i < l; i++) {
-        this.api.column(this.columnsShownIndexes[i]).visible(true);
-    }
-
-    // Hide columns that may have been previously shown.
-    for (var i = 0, l = this.columnsHiddenIndexes.length; i < l; i++) {
-        this.api.column(this.columnsHiddenIndexes[i]).visible(false);
-    }
-
-    // Rebuild details to reflect shown/hidden column changes.
-    var that = this;
-    $('tr.row-detail').each(function () {
-        ResponsiveDatatablesHelper.prototype.hideRowDetail(that, $(this).prev());
-    });
-    if (this.tableElement.hasClass('has-columns-hidden')) {
-        $('tr.detail-show', this.tableElement).each(function (index, element) {
-            ResponsiveDatatablesHelper.prototype.showRowDetail(that, $(element));
-        });
-    }
-};
-
-/**
- * Create the expand icon on the column with the data-class="expand" attribute
- * defined for it's header.
- *
- * @param {Object} tr table row object
- */
-ResponsiveDatatablesHelper.prototype.createExpandIcon = function (tr) {
-    if (this.disabled) {
-        return;
-    }
-
-    // Get the td for tr with the same index as the th in the header tr
-    // that has the data-class="expand" attribute defined.
-    var tds = $('td', tr);
-    // Loop through tds and create an expand icon on the td that has a column
-    // index equal to the expand column given.
-    for (var i = 0, l = tds.length; i < l; i++) {
-        var td = tds[i];
-        var tdIndex = this.api.cell(td).index().column;
-        td = $(td);
-        if (tdIndex === this.expandColumn) {
-            // Create expand icon if there isn't one already.
-            if ($('span.responsiveExpander', td).length == 0) {
-                td.prepend(this.expandIconTemplate);
-
-                // Respond to click event on expander icon.
-                switch (this.options.clickOn) {
-                    case 'cell':
-                        td.on('click', {responsiveDatatablesHelperInstance: this}, this.showRowDetailEventHandler);
-                        break;
-                    case 'row':
-                        $(tr).on('click', {responsiveDatatablesHelperInstance: this}, this.showRowDetailEventHandler);
-                        break;
-                    default:
-                        td.on('click', 'span.responsiveExpander', {responsiveDatatablesHelperInstance: this}, this.showRowDetailEventHandler);
-                        break;
-                }
-            }
-            break;
-        }
-    }
-};
-
-/**
- * Show row detail event handler.
- *
- * This handler is used to handle the click event of the expand icon defined in
- * the table row data element.
- *
- * @param {Object} event jQuery event object
- */
-ResponsiveDatatablesHelper.prototype.showRowDetailEventHandler = function (event) {
-    var responsiveDatatablesHelperInstance = event.data.responsiveDatatablesHelperInstance;
-    if (responsiveDatatablesHelperInstance.disabled) {
-        return;
-    }
-
-    var td = $(this);
-
-    // Nothing to do if there are no columns hidden.
-    if (!td.closest('table').hasClass('has-columns-hidden')) {
-        return;
-    }
-
-    // Get the parent tr of which this td belongs to.
-    var tr = td.closest('tr');
-
-    // Show/hide row details
-    if (tr.hasClass('detail-show')) {
-        ResponsiveDatatablesHelper.prototype.hideRowDetail(responsiveDatatablesHelperInstance, tr);
-    } else {
-        ResponsiveDatatablesHelper.prototype.showRowDetail(responsiveDatatablesHelperInstance, tr);
-    }
-
-    tr.toggleClass('detail-show');
-
-    // Prevent click event from bubbling up to higher-level DOM elements.
-    event.stopPropagation();
-};
-
-/**
- * Show row details.
- *
- * @param {ResponsiveDatatablesHelper} responsiveDatatablesHelperInstance instance of ResponsiveDatatablesHelper
- * @param {Object}                     tr                                 jQuery wrapped set
- */
-ResponsiveDatatablesHelper.prototype.showRowDetail = function (responsiveDatatablesHelperInstance, tr) {
-    // Get column because we need their titles.
-    var api = responsiveDatatablesHelperInstance.api;
-    var columns = api.columns().header();
-
-    // Create the new tr.
-    var newTr = $(responsiveDatatablesHelperInstance.rowTemplate);
-
-    // Get the ul that we'll insert li's into.
-    var ul = $('ul', newTr);
-
-    // Loop through hidden columns and create an li for each of them.
-    for (var i = 0; i < responsiveDatatablesHelperInstance.columnsHiddenIndexes.length; i++) {
-        var index = responsiveDatatablesHelperInstance.columnsHiddenIndexes[i];
-
-        // Get row td
-        var rowIndex = api.row(tr).index();
-        var td = api.cell(rowIndex, index).node();
-
-        // Don't create li if contents are empty (depends on hideEmptyColumnsInRowDetail option).
-        if (!responsiveDatatablesHelperInstance.options.hideEmptyColumnsInRowDetail || td.innerHTML.trim().length) {
-            var li = $(responsiveDatatablesHelperInstance.rowLiTemplate);
-            var hiddenColumnName = $(columns[index]).attr('data-name');
-            $('.columnTitle', li).html(hiddenColumnName !== undefined ? hiddenColumnName : columns[index].innerHTML);
-            var contents = $(td).contents();
-            var clonedContents = contents.clone();
-
-            // Select elements' selectedIndex are not cloned.  Do it manually.
-            for (var n = 0, m = contents.length; n < m; n++) {
-                var node = contents[n];
-                if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SELECT') {
-                    clonedContents[n].selectedIndex = node.selectedIndex
-                }
-            }
-
-            // Set the column contents and save the original td source.
-            $('.columnValue', li).append(clonedContents).data('originalTdSource', td);
-
-            // Copy index to data attribute, so we'll know where to put the value when the tr.row-detail is removed.
-            li.attr('data-column', index);
-
-            // Copy td class to new li.
-            var tdClass = $(td).attr('class');
-            if (tdClass !== 'undefined' && tdClass !== false && tdClass !== '') {
-                      li.addClass(tdClass)
-            }
-
-            ul.append(li);
-        }
-    }
-
-    // Create tr colspan attribute.
-    var colspan = responsiveDatatablesHelperInstance.columnIndexes.length - responsiveDatatablesHelperInstance.columnsHiddenIndexes.length;
-    newTr.find('> td').attr('colspan', colspan);
-
-    // Append the new tr after the current tr.
-    tr.after(newTr);
-
-    // call the showDetail function if needbe
-    if (responsiveDatatablesHelperInstance.options.showDetail){
-        responsiveDatatablesHelperInstance.options.showDetail(newTr);
-    }
-};
-
-/**
- * Hide row details.
- *
- * @param {ResponsiveDatatablesHelper} responsiveDatatablesHelperInstance instance of ResponsiveDatatablesHelper
- * @param {Object}                     tr                                 jQuery wrapped set
- */
-ResponsiveDatatablesHelper.prototype.hideRowDetail = function (responsiveDatatablesHelperInstance, tr) {
-    // If the value of an input has changed while in row detail, we need to copy its state back
-    // to the DataTables object so that value will persist when the tr.row-detail is removed.
-    var rowDetail = tr.next('.row-detail');
-    if (responsiveDatatablesHelperInstance.options.hideDetail){
-        responsiveDatatablesHelperInstance.options.hideDetail(rowDetail);
-    }
-    rowDetail.find('li').each(function () {
-        var columnValueContainer = $(this).find('span.columnValue');
-        var tdContents = columnValueContainer.contents();
-        var td = columnValueContainer.data('originalTdSource');
-        $(td).empty().append(tdContents);
-    });
-    rowDetail.remove();
-};
-
-/**
- * Enable/disable responsive behavior and restores changes made.
- *
- * @param {Boolean} disable, default is true
- */
-ResponsiveDatatablesHelper.prototype.disable = function (disable) {
-    this.disabled = (disable === undefined) || disable;
-
-    if (this.disabled) {
-        // Remove windows resize handler.
-        this.setWindowsResizeHandler(false);
-
-        // Remove all trs that have row details.
-        $('tbody tr.row-detail', this.tableElement).remove();
-
-        // Remove all trs that are marked to have row details shown.
-        $('tbody tr', this.tableElement).removeClass('detail-show');
-
-        // Remove all expander icons.
-        $('tbody tr span.responsiveExpander', this.tableElement).remove();
-
-        this.columnsHiddenIndexes = [];
-        this.columnsShownIndexes = this.columnIndexes;
-        this.showHideColumns();
-        this.tableElement.removeClass('has-columns-hidden');
-
-        this.tableElement.off('click', 'span.responsiveExpander', this.showRowDetailEventHandler);
-    } else {
-        // Add windows resize handler.
-        this.setWindowsResizeHandler();
-    }
-};
-
-/**
- * Get state from cookie.
- */
-ResponsiveDatatablesHelper.prototype.getState = function () {
-    if (typeof(Storage)) {
-        // Use local storage
-        var value = JSON.parse(localStorage.getItem(this.cookieName));
-        if (value) {
-            this.columnIndexes = value.columnIndexes;
-            this.breakpoints = value.breakpoints;
-            this.expandColumn = value.expandColumn;
-            this.lastBreakpoint = value.lastBreakpoint;
-            this.lastStateExists = true;
-        }
-    } else {
-        // No local storage.
-    }
-};
-
-/**
- * Saves state to cookie.
- */
-ResponsiveDatatablesHelper.prototype.setState = function () {
-    if (typeof(Storage)) {
-        // Use local storage
-        var d1 = this.difference(this.lastColumnsHiddenIndexes, this.columnsHiddenIndexes).length;
-        var d2 = this.difference(this.columnsHiddenIndexes, this.lastColumnsHiddenIndexes).length;
-
-        if (d1 + d2 > 0) {
-            var tt;
-            var value = {
-                columnIndexes: this.columnIndexes,               // array
-                columnsHiddenIndexes: this.columnsHiddenIndexes, // array
-                breakpoints: this.breakpoints,                   // object
-                expandColumn: this.expandColumn,                 // int|undefined
-                lastBreakpoint: this.lastBreakpoint              // string
-            };
-
-            localStorage.setItem(this.cookieName, JSON.stringify(value));
-            this.lastColumnsHiddenIndexes = this.columnsHiddenIndexes.slice(0);
-        }
-    } else {
-        // No local storage.
-    }
-};
-
-/**
- * Get Difference.
- */
-ResponsiveDatatablesHelper.prototype.difference = function (a, b) {
-    var arr = [], i, hash = {};
-    for (i = b.length - 1; i >= 0; i--) {
-        hash[b[i]] = true;
-    }
-    for (i = a.length - 1; i >= 0; i--) {
-        if (hash[a[i]] !== true) {
-            arr.push(a[i]);
-        }
-    }
-    return arr;
-};

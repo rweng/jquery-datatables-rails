@@ -60,13 +60,13 @@ bundle install
 
 ```javascript
 // For fluid containers
-$('.datatable').dataTable({
+$('.datatable').DataTable({
   "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
   "sPaginationType": "bootstrap"
 });
 
 // For fixed width containers
-$('.datatable').dataTable({
+$('.datatable').DataTable({
   "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
   "sPaginationType": "bootstrap"
 });
@@ -91,7 +91,7 @@ $('.datatable').dataTable({
 4 - Initialize your datatables using these option:
 
 ```javascript
-$('.datatable').dataTable({
+$('.datatable').DataTable({
   // ajax: ...,
   // autoWidth: false,
   // pagingType: 'full_numbers',
@@ -125,53 +125,42 @@ $('.datatable').dataTable({
 
 1 - Complete steps 1-3 of the General Installation.
 
-2 - Add the lodash gem to your application:
-
-```ruby
-gem 'lodash-rails'
-```
-
-3 - Add some more JavaScript to `application.js`:
+2 - Add some more JavaScript to `application.js`:
 
 ```javascript
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require dataTables/extras/dataTables.responsive
 ```
 
-4 - Add this (and only this) stylesheet to `application.css`:
+3 - Add this (and only this) stylesheet to `application.css`:
 
 ```css
 *= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 *= require dataTables/extras/dataTables.responsive
 ```
 
-5 - Initialize your datatables using:
+4 - Initialize your datatables using:
 
 ```coffeescript
-responsiveHelper = undefined
-breakpointDefinition =
-  tablet: 1024
-  phone: 480
-
-tableElement = $("#example")
-tableElement.dataTable
-  autoWidth: false
-  preDrawCallback: ->
-
-    # Initialize the responsive datatables helper once.
-    responsiveHelper = new ResponsiveDatatablesHelper(tableElement, breakpointDefinition)  unless responsiveHelper
-    return
-
-  rowCallback: (nRow) ->
-    responsiveHelper.createExpandIcon nRow
-    return
-
-  drawCallback: (oSettings) ->
-    responsiveHelper.respond()
-    return
+$("#example").DataTable
+  responsive: true
 ```
 
-6 - To use see the author of responsive files and follow the instructions as described on [datatables-responsive]
+5 - Add `responsive no-wrap` class to html `table`,
+
+````html
+<table class="display responsive no-wrap">
+    <thead>
+        <tr>
+
+        </tr>
+    </thead>
+    ...
+</table>
+````
+
+6. More information at: http://www.datatables.net/extensions/responsive/init
+
 
 ## Plugins
 
@@ -202,8 +191,6 @@ FixedHeader  : dataTables.fixedHeader
 KeyTable     : dataTables.keyTable
 Scroller     : dataTables.scroller
 TableTools   : dataTables.tableTools
-
-# Unofficial extra is available:
 Responsive   : dataTables.responsive
 ````
 
@@ -228,10 +215,6 @@ Make sure to also add it's initialization as described on [datatables extras' si
 [RailsCast #340 DataTables] Apr 11, 2012.
 
 [ajax-datatables-rails] a wrapper around datatable's ajax methods that allow synchronization with server-side.
-
-## Thanks
-
-Thanks to Comanche for responsive support files [datatables-responsive]
 
 [assets]: app/assets/javascripts/dataTables
 [datatables_extras]: http://datatables.net/extras/
