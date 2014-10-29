@@ -123,6 +123,8 @@ $('.datatable').dataTable({
 
 ## Responsive Installation
 
+### If you are using the gem from master branch, bellow text it is invalid, please see http://www.datatables.net/extensions/responsive/init
+
 1 - Complete steps 1-3 of the General Installation.
 
 2 - Add the lodash gem to your application:
