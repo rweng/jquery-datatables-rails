@@ -14,12 +14,17 @@ It provides all the basic DataTables files, and a few of the extras.
 
 If you encounter any errors, please fork the repository, update the plugin files and send a pull-request.
 
+## Upgrade Notes
+
+1 - For people upgrading to 3.0.0 who are using the responsive extension.
+Due to an error displaying the plus icon in a recent version of this gem, the responsive code has now changed and uses the DataTables responsive extension instead. This requires some changes to your responsive configuration. See the Responsive Installation section below and follow the link.
+
 ## General Installation
 
 1 - Add to your Gemfile:
 
 ```ruby
-gem 'jquery-datatables-rails', '~> 2.2.3'
+gem 'jquery-datatables-rails', '~> 3.0.0'
 ```
 
 2 - Install the gem:
@@ -146,7 +151,7 @@ $("#example").DataTable
   responsive: true
 ```
 
-5 - Add `responsive no-wrap` class to html `table`,
+AND/OR - Add `responsive no-wrap` class to html `table`,
 
 ````html
 <table class="display responsive no-wrap">
@@ -159,8 +164,7 @@ $("#example").DataTable
 </table>
 ````
 
-6. More information at: http://www.datatables.net/extensions/responsive/init
-
+6. More information at: http://www.datatables.net/extensions/responsive/
 
 ## Plugins
 
