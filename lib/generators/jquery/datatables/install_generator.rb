@@ -43,11 +43,11 @@ module Jquery
             :regular => ["//= require dataTables/jquery.dataTables\n"],
             :bootstrap2 => [
               "//= require dataTables/jquery.dataTables\n",
-              "//= require dataTables/jquery.dataTables.bootstrap\n"
+              "//= require dataTables/bootstrap/2/jquery.dataTables.bootstrap\n"
             ],
             :bootstrap3 => [
               "//= require dataTables/jquery.dataTables\n",
-              "//= require dataTables/jquery.dataTables.bootstrap3\n"
+              "//= require dataTables/bootstrap/3/jquery.dataTables.bootstrap\n"
             ],
             :foundation => [
               "//= require dataTables/jquery.dataTables\n",
@@ -55,8 +55,7 @@ module Jquery
             ],
             :responsive => [
               "//= require dataTables/jquery.dataTables\n",
-              "//= require dataTables/jquery.dataTables.bootstrap3\n",
-              "//= require dataTables/jquery.dataTables.responsive\n"
+              "//= require dataTables/extras/jquery.dataTables.responsive\n"
             ]
           }
         end
@@ -64,13 +63,10 @@ module Jquery
         def css_assets_map
           {
             :regular => [" *= require dataTables/jquery.dataTables\n"],
-            :bootstrap2 => [" *= require dataTables/jquery.dataTables.bootstrap\n"],
-            :bootstrap3 => [" *= require dataTables/jquery.dataTables.bootstrap3\n"],
+            :bootstrap2 => [" *= require dataTables/bootstrap/2/jquery.dataTables.bootstrap\n"],
+            :bootstrap3 => [" *= require dataTables/bootstrap/3/jquery.dataTables.bootstrap\n"],
             :foundation => [" *= require dataTables/jquery.dataTables.foundation\n"],
-            :responsive => [
-              " *= require dataTables/jquery.dataTables.bootstrap3\n",
-              " *= require dataTables/jquery.dataTables.responsive\n"
-            ]
+            :responsive => [" *= require dataTables/extras/jquery.dataTables.responsive\n"]
           }
         end
       end
