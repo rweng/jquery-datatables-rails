@@ -157,10 +157,10 @@ This will add to the corresponding asset files
 ```ruby
 # app/assets/javascripts/application.js
 //= require dataTables/jquery.dataTables
-//= require dataTables/extras/jquery.dataTables.responsive
+//= require dataTables/extras/dataTables.responsive
 
 # app/assets/stylesheets/application.css
-*= require dataTables/extras/jquery.dataTables.responsive
+*= require dataTables/extras/dataTables.responsive
 ```
 
 3 - Initialize your datatables using:
