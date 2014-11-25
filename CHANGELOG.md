@@ -1,7 +1,10 @@
+### 3.0.1
+  - fix responsive generator.
+
 ### 3.0.0
   - updated Bootstrap 2 css plugin
   - updated jQuery DataTable to 1.10.3, .dataTable() method was renamed to .DataTable()
-  - changed Commanche responsive plugin to DataTable Responsive plugin, it will break the backward compatibility, please see the Responsive section at Readme.  
+  - changed Commanche responsive plugin to DataTable Responsive plugin, it will break the backward compatibility, please see the Responsive section at Readme.
 
 ### 2.2.2
   - updated ColReorder from v1.1.1 to v1.1.2.
