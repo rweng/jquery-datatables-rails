@@ -23,7 +23,7 @@ Due to an error displaying the plus icon in a recent version of this gem, the re
 1 - Add to your Gemfile:
 
 ```ruby
-gem 'jquery-datatables-rails', '~> 3.1.0'
+gem 'jquery-datatables-rails', '~> 3.1.1'
 ```
 
 2 - Install the gem:
@@ -157,10 +157,10 @@ This will add to the corresponding asset files
 ```ruby
 # app/assets/javascripts/application.js
 //= require dataTables/jquery.dataTables
-//= require dataTables/extras/jquery.dataTables.responsive
+//= require dataTables/extras/dataTables.responsive
 
 # app/assets/stylesheets/application.css
-*= require dataTables/extras/jquery.dataTables.responsive
+*= require dataTables/extras/dataTables.responsive
 ```
 
 3 - Initialize your datatables using:
