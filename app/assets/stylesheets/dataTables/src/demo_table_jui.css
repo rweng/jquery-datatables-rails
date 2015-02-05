@@ -216,23 +216,23 @@ table.display td.center {
  */
 
 .sorting_asc {
-	background: url('/assets/dataTables/sort_asc.png') no-repeat center right;
+	background: image_url('dataTables/sort_asc.png') no-repeat center right;
 }
 
 .sorting_desc {
-	background: url('/assets/dataTables/sort_desc.png') no-repeat center right;
+	background: image_url('dataTables/sort_desc.png') no-repeat center right;
 }
 
 .sorting {
-	background: url('/assets/dataTables/sort_both.png') no-repeat center right;
+	background: image_url('dataTables/sort_both.png') no-repeat center right;
 }
 
 .sorting_asc_disabled {
-	background: url('/assets/dataTables/sort_asc_disabled.png') no-repeat center right;
+	background: image_url('dataTables/sort_asc_disabled.png') no-repeat center right;
 }
 
 .sorting_desc_disabled {
-	background: url('/assets/dataTables/sort_desc_disabled.png') no-repeat center right;
+	background: image_url('dataTables/sort_desc_disabled.png') no-repeat center right;
 }
 
 

@@ -157,26 +157,26 @@ a.DTTT_button_print span {
 }
 
 
-a.DTTT_button_csv span { background: image-url('dataTables/extras/csv.png') no-repeat bottom right; }
-a.DTTT_button_csv:hover span { background: image-url('dataTables/extras/csv_hover.png') no-repeat center right; }
+a.DTTT_button_csv span { background: image_url('dataTables/extras/csv.png') no-repeat bottom right; }
+a.DTTT_button_csv:hover span { background-image: image_url('dataTables/extras/csv_hover.png') no-repeat center right; }
 
-a.DTTT_button_xls span { background: image-url('dataTables/extras/xls.png') no-repeat center right; }
+a.DTTT_button_xls span { background: image_url('dataTables/extras/xls.png') no-repeat center right; }
 a.DTTT_button_xls:hover span { background: #f0f0f0 image-url('dataTables/extras/xls_hover.png') no-repeat center right; }
 
-a.DTTT_button_copy span { background: image-url('dataTables/extras/copy.png') no-repeat center right; }
+a.DTTT_button_copy span { background: image_url('dataTables/extras/copy.png') no-repeat center right; }
 a.DTTT_button_copy:hover span { background: #f0f0f0 image-url('dataTables/extras/copy_hover.png') no-repeat center right; }
 
-a.DTTT_button_pdf span { background: image-url('dataTables/extras/pdf.png') no-repeat center right; }
+a.DTTT_button_pdf span { background: image_url('dataTables/extras/pdf.png') no-repeat center right; }
 a.DTTT_button_pdf:hover span { background: #f0f0f0 image-url('dataTables/extras/pdf_hover.png') no-repeat center right; }
 
-a.DTTT_button_print span { background: image-url('dataTables/extras/print.png') no-repeat center right; }
+a.DTTT_button_print span { background: image_url('dataTables/extras/print.png') no-repeat center right; }
 a.DTTT_button_print:hover span { background: #f0f0f0 image-url('dataTables/extras/print_hover.png') no-repeat center right; }
 
  */
 
 button.DTTT_button_collection span {
 	padding-right: 17px;
-	background: image-url('dataTables/extras/collection.png') no-repeat center right;
+	background: image_url('dataTables/extras/collection.png') no-repeat center right;
 }
 
 button.DTTT_button_collection:hover span {

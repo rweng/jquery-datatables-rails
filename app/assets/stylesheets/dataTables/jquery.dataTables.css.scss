@@ -39,19 +39,19 @@ table.dataTable thead .sorting {
   *cursor: hand;
 }
 table.dataTable thead .sorting {
-  background: url("../dataTables/sort_both.png") no-repeat center right;
+  background: image_url('dataTables/sort_both.png') no-repeat center right;
 }
 table.dataTable thead .sorting_asc {
-  background: url("../dataTables/sort_asc.png") no-repeat center right;
+  background: image_url('dataTables/sort_asc.png') no-repeat center right;
 }
 table.dataTable thead .sorting_desc {
-  background: url("../dataTables/sort_desc.png") no-repeat center right;
+  background: image_url('dataTables/sort_desc.png') no-repeat center right;
 }
 table.dataTable thead .sorting_asc_disabled {
-  background: url("../dataTables/sort_asc_disabled.png") no-repeat center right;
+  background: image_url('dataTables/sort_asc_disabled.png') no-repeat center right;
 }
 table.dataTable thead .sorting_desc_disabled {
-  background: url("../dataTables/sort_desc_disabled.png") no-repeat center right;
+  background: image_url('dataTables/sort_desc_disabled.png') no-repeat center right;
 }
 table.dataTable tbody tr {
   background-color: white;
@@ -449,7 +449,7 @@ table.dataTable td {
 .dataTables_wrapper:after {
   visibility: hidden;
   display: block;
-  content: "";
+  content: '';
   clear: both;
   height: 0;
 }
