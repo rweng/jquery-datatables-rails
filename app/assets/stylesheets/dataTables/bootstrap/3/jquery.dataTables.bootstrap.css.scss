@@ -278,3 +278,13 @@ div.DTFC_LeftFootWrapper table {
 div.FixedHeader_Cloned table {
 	margin: 0 !important
 }
+
+
+/*
+ * 50% wide column
+ */
+div.row .col-50-percent {
+	width: 50%;
+	padding: 0px 15px 0px 15px;
+	float: left;
+}
