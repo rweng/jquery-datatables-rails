@@ -209,7 +209,7 @@ These files can be found in the [assets directory][assets].
 AutoFill     : dataTables.autoFill
 ColReorder   : dataTables.colReorder
 ColVis       : dataTables.colVis
-FixedColumns : dataTables.fixedColumn
+FixedColumns : dataTables.fixedColumns
 FixedHeader  : dataTables.fixedHeader
 KeyTable     : dataTables.keyTable
 Scroller     : dataTables.scroller
