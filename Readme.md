@@ -23,7 +23,7 @@ Due to an error displaying the plus icon in a recent version of this gem, the re
 1 - Add to your Gemfile:
 
 ```ruby
-gem 'jquery-datatables-rails'
+gem 'jquery-datatables-rails', '~> 3.2.0'
 ```
 
 2 - Install the gem:
