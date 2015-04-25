@@ -9,24 +9,26 @@ div.dataTables_info {
 	font-weight: normal;
 }
 
-div.dataTables_length {
-	padding-top: 6px;
-}
 div.dataTables_length label {
 	float: left;
 	text-align: left;
+	margin-bottom: 0;
 }
 
 div.dataTables_length select {
 	width: 75px;
+	margin-bottom: 0;
 }
 
 div.dataTables_filter label {
 	float: right;
+	margin-bottom: 0;
 }
 div.dataTables_filter input {
 	display: inline-block !important;
 	width: auto !important;
+	margin-bottom: 0;
+	margin-left: 0.5em;
 }
 
 div.dataTables_info {
@@ -41,7 +43,7 @@ div.dataTables_paginate {
 
 table.dataTable {
 	clear: both;
-	margin-bottom: 0.5em !important;
+	margin: 0.5em 0 !important;
 	max-width: none !important;
 	width: 100%;
 }
@@ -73,6 +75,7 @@ div.dataTables_scrollHead table {
 
 div.dataTables_scrollBody table {
 	border-top: none;
+	margin-top: 0 !important;
 	margin-bottom: 0 !important;
 }
 
@@ -82,6 +85,7 @@ div.dataTables_scrollBody tbody tr:first-child td {
 }
 
 div.dataTables_scrollFoot table {
+	margin-top: 0 !important;
 	border-top: none;
 }
 
@@ -115,6 +119,11 @@ table.DTTT_selectable tbody tr {
 div.DTTT {
 	float: left;
 	margin-bottom: 0;
+	margin-top: -0.3em;
+}
+
+div.DTTT .button {
+	margin: 0 0 0.25rem;
 }
 
 div.DTTT .button:hover {
@@ -209,3 +218,5 @@ div.DTFC_LeftBodyWrapper tbody tr:first-child td {
 div.DTFC_LeftFootWrapper table {
 	border-top: none;
 }
+
+

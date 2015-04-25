@@ -5,7 +5,7 @@
  * Language:    Javascript
  * License:     GPL v2 / 3 point BSD
  * Project:     DataTables
- *
+ * 
  * Copyright 2009-2012 Allan Jardine, all rights reserved.
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -90,13 +90,13 @@ button.DTTT_button {
 	padding: 3px 8px;
 }
 
-.DTTT_button embed {
+.DTTT_button embed { 
 	outline: none;
 }
 
-button.DTTT_button:hover,
-div.DTTT_button:hover,
-a.DTTT_button:hover {
+button.DTTT_button:hover:not(.DTTT_disabled),
+div.DTTT_button:hover:not(.DTTT_disabled),
+a.DTTT_button:hover:not(.DTTT_disabled) {
 	border: 1px solid #666;
 	text-decoration: none !important;
 
@@ -115,12 +115,36 @@ a.DTTT_button:hover {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3f3f3', endColorstr='#f4f4f4',GradientType=0 ); /* IE6-9 */
 }
 
+button.DTTT_button:focus,
+div.DTTT_button:focus,
+a.DTTT_button:focus {
+	border: 1px solid #426c9e;
+	text-shadow: 0 1px 0 #c4def1;
+	outline: none;
+
+	background-color: #a3d0ef 100%;
+	background-image: -webkit-linear-gradient(top, #a3d0ef 0%, #79ace9 65%, #a3d0ef 100%);
+	background-image:    -moz-linear-gradient(top, #a3d0ef 0%, #79ace9 65%, #a3d0ef 100%);
+	background-image:     -ms-linear-gradient(top, #a3d0ef 0%, #79ace9 65%, #a3d0ef 100%);
+	background-image:      -o-linear-gradient(top, #a3d0ef 0%, #79ace9 65%, #a3d0ef 100%);
+	background-image:         linear-gradient(top, #a3d0ef 0%, #79ace9 65%, #a3d0ef 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#a3d0ef', EndColorStr='#a3d0ef');
+}
+
+button.DTTT_button:active:not(.DTTT_disabled),
+div.DTTT_button:active:not(.DTTT_disabled),
+a.DTTT_button:active:not(.DTTT_disabled) {
+	-webkit-box-shadow: inset 1px 1px 3px #999999;
+	-moz-box-shadow: inset 1px 1px 3px #999999;
+	box-shadow: inset 1px 1px 3px #999999;
+}
+
 button.DTTT_disabled,
 div.DTTT_disabled,
 a.DTTT_disabled {
-	color: #999;
+	color: #999 !important;
 	border: 1px solid #d0d0d0;
-
+	cursor: default;
 	background: #ffffff; /* Old browsers */
 	background: -webkit-linear-gradient(top, #ffffff 0%,#f9f9f9 89%,#fafafa 100%); /* Chrome10+,Safari5.1+ */
 	background:    -moz-linear-gradient(top, #ffffff 0%,#f9f9f9 89%,#fafafa 100%); /* FF3.6+ */
@@ -158,19 +182,19 @@ a.DTTT_button_print span {
 
 
 a.DTTT_button_csv span { background: image_url('dataTables/extras/csv.png') no-repeat bottom right; }
-a.DTTT_button_csv:hover span { background-image: image_url('dataTables/extras/csv_hover.png') no-repeat center right; }
+a.DTTT_button_csv:hover span { background: image_url('dataTables/extras/csv_hover.png') no-repeat center right; }
 
 a.DTTT_button_xls span { background: image_url('dataTables/extras/xls.png') no-repeat center right; }
-a.DTTT_button_xls:hover span { background: #f0f0f0 image-url('dataTables/extras/xls_hover.png') no-repeat center right; }
+a.DTTT_button_xls:hover span { background: #f0f0f0 image_url('dataTables/extras/xls_hover.png') no-repeat center right; }
 
 a.DTTT_button_copy span { background: image_url('dataTables/extras/copy.png') no-repeat center right; }
-a.DTTT_button_copy:hover span { background: #f0f0f0 image-url('dataTables/extras/copy_hover.png') no-repeat center right; }
+a.DTTT_button_copy:hover span { background: #f0f0f0 image_url('dataTables/extras/copy_hover.png') no-repeat center right; }
 
 a.DTTT_button_pdf span { background: image_url('dataTables/extras/pdf.png') no-repeat center right; }
-a.DTTT_button_pdf:hover span { background: #f0f0f0 image-url('dataTables/extras/pdf_hover.png') no-repeat center right; }
+a.DTTT_button_pdf:hover span { background: #f0f0f0 image_url('dataTables/extras/pdf_hover.png') no-repeat center right; }
 
 a.DTTT_button_print span { background: image_url('dataTables/extras/print.png') no-repeat center right; }
-a.DTTT_button_print:hover span { background: #f0f0f0 image-url('dataTables/extras/print_hover.png') no-repeat center right; }
+a.DTTT_button_print:hover span { background: #f0f0f0 image_url('dataTables/extras/print_hover.png') no-repeat center right; }
 
  */
 
@@ -181,7 +205,7 @@ button.DTTT_button_collection span {
 
 button.DTTT_button_collection:hover span {
 	padding-right: 17px;
-	background: #f0f0f0 image-url('dataTables/extras/collection_hover.png') no-repeat center right;
+	background: #f0f0f0 image_url('dataTables/extras/collection_hover.png') no-repeat center right;
 }
 
 
@@ -248,7 +272,7 @@ div.DTTT_collection {
 	    -ms-border-radius: 5px;
 	     -o-border-radius: 5px;
 	        border-radius: 5px;
-
+	
 	-webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
 	   -moz-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
 	    -ms-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
@@ -257,7 +281,7 @@ div.DTTT_collection {
 }
 
 div.DTTT_collection_background {
-	background: transparent image-url('dataTables/extras/background.png') repeat top left;
+	background: black;
 	z-index: 2001;
 }
 
@@ -271,7 +295,7 @@ div.DTTT_collection a.DTTT_button {
 	display: block;
 	float: none;
 	margin-bottom: 4px;
-
+	
 	-webkit-box-shadow: 1px 1px 3px #999;
 	   -moz-box-shadow: 1px 1px 3px #999;
 	    -ms-box-shadow: 1px 1px 3px #999;
@@ -304,18 +328,18 @@ div.DTTT_collection a.DTTT_button {
 	background:      -o-linear-gradient(top, #ffffff 0%,#f3f3f3 89%,#f9f9f9 100%); /* Opera 11.10+ */
 	background:         linear-gradient(top, #ffffff 0%,#f3f3f3 89%,#f9f9f9 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f9f9f9',GradientType=0 ); /* IE6-9 */
-
+	
 	opacity: 0.95;
 
 	border: 1px solid black;
 	border: 1px solid rgba(0, 0, 0, 0.5);
-
+	
 	-webkit-border-radius: 6px;
 	   -moz-border-radius: 6px;
 	    -ms-border-radius: 6px;
 	     -o-border-radius: 6px;
 	        border-radius: 6px;
-
+	
 	-webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.5);
 	   -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.5);
 	    -ms-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.5);
