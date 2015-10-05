@@ -279,11 +279,12 @@ table.dataTable td {
   zoom: 1;
 }
 .dataTables_wrapper .dataTables_length {
-  float: left;
+  float: right;
+  margin-right: 18px;
 }
 .dataTables_wrapper .dataTables_filter {
-  float: right;
-  text-align: right;
+  float: left;
+  margin-left: 18px;
 }
 .dataTables_wrapper .dataTables_filter input {
   margin-left: 0.5em;
