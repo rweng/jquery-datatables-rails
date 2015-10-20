@@ -833,8 +833,6 @@ $(document).on( 'init.dt.dtr', function (e, settings, json) {
 		 settings.oInit.responsive ||
 		 DataTable.defaults.responsive
 	) {
-		console.log( e.namespace );
-
 		var init = settings.oInit.responsive;
 
 		if ( init !== false ) {
