@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.homepage = "https://github.com/rweng/jquery-datatables-rails"
   s.summary = %q{jquery datatables for rails}
   s.description = %q{}
+  s.license = 'MIT'
 
   s.files = `git ls-files`.split("\n")
   s.files = Dir["{app,lib,vendor}/**/*"]
