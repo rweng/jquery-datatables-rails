@@ -22,12 +22,12 @@
 ### 2.2.0
   - only changed version to respect the semver.org.
   - this version it is equal to 2.1.10.0.4
-  - it is incompatible with 2.10.0.3, because jQuery DataTables Bootstrap 3 pluging respected the new parameters name from DataTables 1.10.x
+  - it is incompatible with 2.10.0.3, because jQuery DataTables Bootstrap 3 plugin respected the new parameters name from DataTables 1.10.x
 
 ### 2.1.10.0.4 (yanked)
 
 Features:
-  - updated bootstrap 3 javascritp and stylesheet
+  - updated bootstrap 3 javascript and stylesheet
 
 ### 2.1.10.0.3
 Bugfixies:
@@ -51,7 +51,7 @@ Features:
 ### 2.1.10.0.0
 
 Features:
-  - updated extras plungins and changed names to be compatible with main DataTables plugins
+  - updated extras plugins and changed names to be compatible with main DataTables plugins
   - updated to jQuery DataTables 1.10.0
 
 
