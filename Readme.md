@@ -207,13 +207,14 @@ These files can be found in the [assets directory][assets].
 # Official extras are available:
 [Plugin]     : [ExtraName]
 AutoFill     : dataTables.autoFill
+Buttons      : dataTables.buttons
 ColReorder   : dataTables.colReorder
 ColVis       : dataTables.colVis
 FixedColumns : dataTables.fixedColumns
 FixedHeader  : dataTables.fixedHeader
 KeyTable     : dataTables.keyTable
+Select       : dataTables.select
 Scroller     : dataTables.scroller
-TableTools   : dataTables.tableTools
 Responsive   : dataTables.responsive
 ````
 
