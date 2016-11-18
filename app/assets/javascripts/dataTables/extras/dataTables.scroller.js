@@ -1,15 +1,15 @@
-/*! Scroller 1.4.0
- * ©2011-2015 SpryMedia Ltd - datatables.net/license
+/*! Scroller 1.4.2
+ * ©2011-2016 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     Scroller
  * @description Virtual rendering for DataTables
- * @version     1.4.0
+ * @version     1.4.2
  * @file        dataTables.scroller.js
  * @author      SpryMedia Ltd (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
- * @copyright   Copyright 2011-2015 SpryMedia Ltd.
+ * @copyright   Copyright 2011-2016 SpryMedia Ltd.
  *
  * This source file is free software, available under the following license:
  *   MIT license - http://datatables.net/license/mit
@@ -431,9 +431,11 @@ $.extend( Scroller.prototype, {
 
 		var heights = this.s.heights;
 
-		heights.viewport = $(this.dom.scroller).height();
-		this.s.viewportRows = parseInt( heights.viewport / heights.row, 10 )+1;
-		this.s.dt._iDisplayLength = this.s.viewportRows * this.s.displayBuffer;
+		if ( heights.row ) {
+			heights.viewport = $(this.dom.scroller).height();
+			this.s.viewportRows = parseInt( heights.viewport / heights.row, 10 )+1;
+			this.s.dt._iDisplayLength = this.s.viewportRows * this.s.displayBuffer;
+		}
 
 		if ( bRedraw === undefined || bRedraw )
 		{
@@ -441,6 +443,30 @@ $.extend( Scroller.prototype, {
 		}
 	},
 
+
+	/**
+	 * Get information about current displayed record range. This corresponds to
+	 * the information usually displayed in the "Info" block of the table.
+	 *
+	 * @returns {object} info as an object:
+	 *  {
+	 *      start: {int}, // the 0-indexed record at the top of the viewport
+	 *      end:   {int}, // the 0-indexed record at the bottom of the viewport
+	 *  }
+	*/
+	"fnPageInfo": function()
+	{
+		var 
+			dt = this.s.dt,
+			iScrollTop = this.dom.scroller.scrollTop,
+			iTotal = dt.fnRecordsDisplay(),
+			iPossibleEnd = Math.ceil(this.fnPixelsToRow(iScrollTop + this.s.heights.viewport, false, this.s.ani));
+
+		return {
+			start: Math.floor(this.fnPixelsToRow(iScrollTop, false, this.s.ani)),
+			end: iTotal < iPossibleEnd ? iTotal-1 : iPossibleEnd-1
+		};
+	},
 
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -556,7 +582,11 @@ $.extend( Scroller.prototype, {
 			this.s.topRowFloat = this.s.dt.oLoadedState.iScrollerTopRow || 0;
 		}
 
-		$(this.s.dt.nTable).on( 'init.dt', function () {
+		// Measure immediately. Scroller will have been added using preInit, so
+		// we can reliably do this here. We could potentially also measure on
+		// init complete, which would be useful for cases where the data is Ajax
+		// loaded and longer than a single line.
+		$(this.s.dt.nTable).one( 'init.dt', function () {
 			that.fnMeasure();
 		} );
 
@@ -631,7 +661,7 @@ $.extend( Scroller.prototype, {
 
 			if ( Math.abs( iScrollTop - this.s.lastScrollTop ) > heights.viewport || this.s.ani ) {
 				iTopRow = parseInt(this._domain( 'physicalToVirtual', iScrollTop ) / heights.row, 10) - preRows;
-				this.s.topRowFloat = (this._domain( 'physicalToVirtual', iScrollTop ) / heights.row);
+				this.s.topRowFloat = this._domain( 'physicalToVirtual', iScrollTop ) / heights.row;
 			}
 			else {
 				iTopRow = this.fnPixelsToRow( iScrollTop ) - preRows;
@@ -686,6 +716,9 @@ $.extend( Scroller.prototype, {
 					this.s.loaderVisible = true;
 				}
 			}
+		}
+		else {
+			this.s.topRowFloat = this._domain( 'physicalToVirtual', iScrollTop ) / heights.row;
 		}
 
 		this.s.lastScrollTop = iScrollTop;
@@ -854,10 +887,12 @@ $.extend( Scroller.prototype, {
 
 		// Because of the order of the DT callbacks, the info update will
 		// take precedence over the one we want here. So a 'thread' break is
-		// needed
-		setTimeout( function () {
-			that._fnInfo.call( that );
-		}, 0 );
+		// needed.  Only add the thread break if bInfo is set
+		if ( this.s.dt.oFeatures.bInfo ) {
+			setTimeout( function () {
+				that._fnInfo.call( that );
+			}, 0 );
+		}
 
 		// Hide the loading indicator
 		if ( this.dom.loader && this.s.loaderVisible ) {
@@ -930,7 +965,13 @@ $.extend( Scroller.prototype, {
 		$('div.'+dt.oClasses.sScrollBody, container).append( nTable );
 
 		// If initialised using `dom`, use the holding element as the insert point
-		container.appendTo( this.s.dt.nHolding || origTable.parentNode );
+		var insertEl = this.s.dt.nHolding || origTable.parentNode;
+
+		if ( ! $(insertEl).is(':visible') ) {
+			insertEl = 'body';
+		}
+
+		container.appendTo( insertEl );
 		this.s.heights.row = $('tr', tbody).eq(1).outerHeight();
 
 		container.remove();
@@ -1019,6 +1060,9 @@ $.extend( Scroller.prototype, {
 				$(n[i]).html( sOut );
 			}
 		}
+
+		// DT doesn't actually (yet) trigger this event, but it will in future
+		$(dt.nTable).triggerHandler( 'info.dt' );
 	}
 } );
 
@@ -1173,7 +1217,7 @@ Scroller.oDefaults = Scroller.defaults;
  *  @name      Scroller.version
  *  @static
  */
-Scroller.version = "1.4.0";
+Scroller.version = "1.4.2";
 
 
 
@@ -1292,6 +1336,14 @@ Api.register( 'scroller.measure()', function ( redraw ) {
 	return this;
 } );
 
+Api.register( 'scroller.page()', function() {
+	var ctx = this.context;
+
+	if ( ctx.length && ctx[0].oScroller ) {
+		return ctx[0].oScroller.fnPageInfo();
+	}
+	// undefined
+} );
 
 return Scroller;
 }));

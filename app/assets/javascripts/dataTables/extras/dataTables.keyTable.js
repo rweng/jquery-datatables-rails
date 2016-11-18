@@ -1,15 +1,15 @@
-/*! KeyTable 2.1.0
- * ©2009-2015 SpryMedia Ltd - datatables.net/license
+/*! KeyTable 2.1.3
+ * ©2009-2016 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     KeyTable
  * @description Spreadsheet like keyboard navigation for DataTables
- * @version     2.1.0
+ * @version     2.1.3
  * @file        dataTables.keyTable.js
  * @author      SpryMedia Ltd (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
- * @copyright   Copyright 2009-2015 SpryMedia Ltd.
+ * @copyright   Copyright 2009-2016 SpryMedia Ltd.
  *
  * This source file is free software, available under the following license:
  *   MIT license - http://datatables.net/license/mit
@@ -69,7 +69,10 @@ var KeyTable = function ( dt, opts ) {
 		/** @type {DataTable.Api} DataTables' API instance */
 		dt: new DataTable.Api( dt ),
 
-		enable: true
+		enable: true,
+
+		/** @type {bool} Flag for if a draw is triggered by focus */
+		focusDraw: false
 	};
 
 	// DOM items
@@ -93,7 +96,7 @@ $.extend( KeyTable.prototype, {
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 * API methods for DataTables API interface
 	 */
-	
+
 	/**
 	 * Blur the table's cell focus
 	 */
@@ -163,7 +166,7 @@ $.extend( KeyTable.prototype, {
 		}
 
 		// Click to focus
-		$( dt.table().body() ).on( 'click.keyTable', 'th, td', function () {
+		$( dt.table().body() ).on( 'click.keyTable', 'th, td', function (e) {
 			if ( that.s.enable === false ) {
 				return;
 			}
@@ -174,17 +177,17 @@ $.extend( KeyTable.prototype, {
 				return;
 			}
 
-			that._focus( cell );
+			that._focus( cell, null, false, e );
 		} );
 
 		// Key events
-		$( document.body ).on( 'keydown.keyTable', function (e) {
+		$( document ).on( 'keydown.keyTable', function (e) {
 			that._key( e );
 		} );
 
 		// Click blur
 		if ( this.c.blurable ) {
-			$( document.body ).on( 'click.keyTable', function ( e ) {
+			$( document ).on( 'click.keyTable', function ( e ) {
 				// Click on the search input will blur focus
 				if ( $(e.target).parents( '.dataTables_filter' ).length ) {
 					that._blur();
@@ -200,12 +203,17 @@ $.extend( KeyTable.prototype, {
 					return;
 				}
 
+				//If the click was inside the fixed columns container, don't blur
+				if ( $(e.target).parents().filter('.DTFC_Cloned').length ) {
+					return;
+				}
+
 				that._blur();
 			} );
 		}
 
 		if ( this.c.editor ) {
-			dt.on( 'key.kt', function ( e, dt, key, cell, orig ) {
+			dt.on( 'key.keyTable', function ( e, dt, key, cell, orig ) {
 				that._editor( key, orig );
 			} );
 		}
@@ -219,6 +227,27 @@ $.extend( KeyTable.prototype, {
 			} );
 		}
 
+		// Reload - re-focus on the currently selected item. In SSP mode this
+		// has the effect of keeping the focus in position when changing page as
+		// well (which is different from how client-side processing works).
+		dt.on( 'xhr.keyTable', function ( e ) {
+			if ( that.s.focusDraw ) {
+				// Triggered by server-side processing, and thus `_focus` will
+				// do the refocus on the next draw event
+				return;
+			}
+
+			var lastFocus = that.s.lastFocus;
+
+			if ( lastFocus ) {
+				that.s.lastFocus = null;
+
+				dt.one( 'draw', function () {
+					that._focus( lastFocus );
+				} );
+			}
+		} );
+
 		dt.on( 'destroy.keyTable', function () {
 			dt.off( '.keyTable' );
 			$( dt.table().body() ).off( 'click.keyTable', 'th, td' );
@@ -231,7 +260,15 @@ $.extend( KeyTable.prototype, {
 		var state = dt.state.loaded();
 
 		if ( state && state.keyTable ) {
-			dt.cell( state.keyTable ).focus();
+			// Wait until init is done
+			dt.one( 'init', function () {
+				var cell = dt.cell( state.keyTable );
+
+				// Ensure that the saved cell still exists
+				if ( cell.any() ) {
+					cell.focus();
+				}
+			} );
 		}
 		else if ( this.c.focus ) {
 			dt.cell( this.c.focus ).focus();
@@ -260,6 +297,8 @@ $.extend( KeyTable.prototype, {
 
 		$( cell.node() ).removeClass( this.c.className );
 		this.s.lastFocus = null;
+
+		this._updateFixedColumns(cell.index().column);
 
 		this._emitEvent( 'key-blur', [ this.s.dt, cell ] );
 	},
@@ -302,16 +341,19 @@ $.extend( KeyTable.prototype, {
 
 		orig.stopPropagation();
 
+		// Return key should do nothing - for textareas's it would empty the
+		// contents
+		if ( key === 13 ) {
+			orig.preventDefault();
+		}
+
 		editor.inline( this.s.lastFocus.index() );
 
 		// Excel style - select all text
-		var input = $('div.DTE input');
-		if ( input.length ) {
-			input[0].select();
-		}
+		$('div.DTE input, div.DTE textarea').select();
 
 		// Reduce the keys the Keys listens for
-		dt.keys.enable( 'navigation-only' );
+		dt.keys.enable( this.c.editorKeys );
 
 		// On blur of the navigation submit
 		dt.one( 'key-blur.editor', function () {
@@ -352,14 +394,17 @@ $.extend( KeyTable.prototype, {
 	 * @param  {integer} [column] Not required if a cell is given as the first
 	 *   parameter. Otherwise this is the column data index for the cell to
 	 *   focus on
+	 * @param {boolean} [shift=true] Should the viewport be moved to show cell
 	 * @private
 	 */
-	_focus: function ( row, column )
+	_focus: function ( row, column, shift, originalEvent )
 	{
 		var that = this;
 		var dt = this.s.dt;
 		var pageInfo = dt.page.info();
 		var lastFocus = this.s.lastFocus;
+		if( ! originalEvent)
+			originalEvent = null;
 
 		if ( ! this.s.enable ) {
 			return;
@@ -385,8 +430,11 @@ $.extend( KeyTable.prototype, {
 		// Is the row on the current page? If not, we need to redraw to show the
 		// page
 		if ( pageInfo.length !== -1 && (row < pageInfo.start || row >= pageInfo.start+pageInfo.length) ) {
+			this.s.focusDraw = true;
+
 			dt
 				.one( 'draw', function () {
+					that.s.focusDraw = false;
 					that._focus( row, column );
 				} )
 				.page( Math.floor( row / pageInfo.length ) )
@@ -421,20 +469,24 @@ $.extend( KeyTable.prototype, {
 		var node = $( cell.node() );
 		node.addClass( this.c.className );
 
+		this._updateFixedColumns(column);
+
 		// Shift viewpoint and page to make cell visible
-		this._scroll( $(window), $(document.body), node, 'offset' );
+		if ( shift === undefined || shift === true ) {
+			this._scroll( $(window), $(document.body), node, 'offset' );
 
-		var bodyParent = dt.table().body().parentNode;
-		if ( bodyParent !== dt.table().header().parentNode ) {
-			var parent = $(bodyParent.parentNode);
+			var bodyParent = dt.table().body().parentNode;
+			if ( bodyParent !== dt.table().header().parentNode ) {
+				var parent = $(bodyParent.parentNode);
 
-			this._scroll( parent, parent, node, 'position' );
+				this._scroll( parent, parent, node, 'position' );
+			}
 		}
 
 		// Event and finish
 		this.s.lastFocus = cell;
 
-		this._emitEvent( 'key-focus', [ this.s.dt, cell ] );
+		this._emitEvent( 'key-focus', [ this.s.dt, cell, originalEvent || null ] );
 		dt.state.save();
 	},
 
@@ -447,7 +499,9 @@ $.extend( KeyTable.prototype, {
 	 */
 	_key: function ( e )
 	{
-		if ( ! this.s.enable ) {
+		var enable = this.s.enable;
+		var navEnable = enable === true || enable === 'navigation-only';
+		if ( ! enable ) {
 			return;
 		}
 
@@ -471,62 +525,75 @@ $.extend( KeyTable.prototype, {
 
 		switch( e.keyCode ) {
 			case 9: // tab
+				// `enable` can be tab-only
 				this._shift( e, e.shiftKey ? 'left' : 'right', true );
 				break;
 
 			case 27: // esc
-				if ( this.s.blurable && this.s.enable === true ) {
+				if ( this.s.blurable && enable === true ) {
 					this._blur();
 				}
 				break;
 
 			case 33: // page up (previous page)
 			case 34: // page down (next page)
-				e.preventDefault();
-				var index = dt.cells( {page: 'current'} ).nodes().indexOf( cell.node() );
+				if ( navEnable ) {
+					e.preventDefault();
+					var index = dt.cells( {page: 'current'} ).nodes().indexOf( cell.node() );
 
-				dt
-					.one( 'draw', function () {
-						var nodes = dt.cells( {page: 'current'} ).nodes();
+					dt
+						.one( 'draw', function () {
+							var nodes = dt.cells( {page: 'current'} ).nodes();
 
-						that._focus( dt.cell( index < nodes.length ?
-							nodes[ index ] :
-							nodes[ nodes.length-1 ]
-						) );
-					} )
-					.page( e.keyCode === 33 ? 'previous' : 'next' )
-					.draw( false );
+							that._focus( dt.cell( index < nodes.length ?
+								nodes[ index ] :
+								nodes[ nodes.length-1 ]
+							) , null, true, e);
+						} )
+						.page( e.keyCode === 33 ? 'previous' : 'next' )
+						.draw( false );
+				}
 				break;
 
 			case 35: // end (end of current page)
 			case 36: // home (start of current page)
-				e.preventDefault();
-				var indexes = dt.cells( {page: 'current'} ).indexes();
+				if ( navEnable ) {
+					e.preventDefault();
+					var indexes = dt.cells( {page: 'current'} ).indexes();
 
-				this._focus( dt.cell(
-					indexes[ e.keyCode === 35 ? indexes.length-1 : 0 ]
-				) );
+					this._focus( dt.cell(
+						indexes[ e.keyCode === 35 ? indexes.length-1 : 0 ]
+					), null, true, e );
+				}
 				break;
 
 			case 37: // left arrow
-				this._shift( e, 'left' );
+				if ( navEnable ) {
+					this._shift( e, 'left' );
+				}
 				break;
 
 			case 38: // up arrow
-				this._shift( e, 'up' );
+				if ( navEnable ) {
+					this._shift( e, 'up' );
+				}
 				break;
 
 			case 39: // right arrow
-				this._shift( e, 'right' );
+				if ( navEnable ) {
+					this._shift( e, 'right' );
+				}
 				break;
 
 			case 40: // down arrow
-				this._shift( e, 'down' );
+				if ( navEnable ) {
+					this._shift( e, 'down' );
+				}
 				break;
 
 			default:
 				// Everything else - pass through only when fully enabled
-				if ( this.s.enable === true ) {
+				if ( enable === true ) {
 					this._emitEvent( 'key', [ dt, e.keyCode, this.s.lastFocus, e ] );
 				}
 				break;
@@ -567,12 +634,12 @@ $.extend( KeyTable.prototype, {
 		}
 
 		// Bottom correction
-		if ( offset.top + height > scrollTop + containerHeight ) {
+		if ( offset.top + height > scrollTop + containerHeight && height < containerHeight ) {
 			scroller.scrollTop( offset.top + height - containerHeight );
 		}
 
 		// Right correction
-		if ( offset.left + width > scrollLeft + containerWidth ) {
+		if ( offset.left + width > scrollLeft + containerWidth && width < containerWidth ) {
 			scroller.scrollLeft( offset.left + width - containerWidth );
 		}
 	},
@@ -652,7 +719,7 @@ $.extend( KeyTable.prototype, {
 		) {
 			e.preventDefault();
 
-			this._focus( row, column );
+			this._focus( row, column, true, e );
 		}
 		else if ( ! keyBlurable || ! this.c.blurable ) {
 			// No new focus, but if the table isn't blurable, then don't loose
@@ -692,10 +759,27 @@ $.extend( KeyTable.prototype, {
 			} )
 			.insertBefore( dt.table().node() );
 
-		div.children().on( 'focus', function () {
-			that._focus( dt.cell(':eq(0)', {page: 'current'}) );
+		div.children().on( 'focus', function (e) {
+			that._focus( dt.cell(':eq(0)', '0:visible', {page: 'current'}), null, true, e );
 		} );
-	}
+	},
+	/**
+	 * Update fixed columns if they are enabled and if the cell we are focusing is inside a  fixed column
+	 * @param  {integer}  column           Index of the column being changed
+	 *
+	 * @private
+	 */
+	 _updateFixedColumns:function(column){
+	 	var dt = this.s.dt;
+	 	var settings = dt.settings()[0];
+
+	 	if(settings._oFixedColumns){
+	 		var leftCols = settings._oFixedColumns.s.iLeftColumns;
+	 		var rightCols = settings.aoColumns.length - settings._oFixedColumns.s.iRightColumns;
+	 		if (column < leftCols || column > rightCols)
+	 			dt.fixedColumns().update();
+	 	}
+	 }
 } );
 
 
@@ -733,6 +817,13 @@ KeyTable.defaults = {
 	editor: null,
 
 	/**
+	 * Option that defines what KeyTable's behaviour will be when used with
+	 * Editor's inline editing. Can be `navigation-only` or `tab-only`.
+	 * @type {String}
+	 */
+	editorKeys: 'navigation-only',
+
+	/**
 	 * Select a cell to automatically select on start up. `null` for no
 	 * automatic selection
 	 * @type {cell-selector}
@@ -754,7 +845,7 @@ KeyTable.defaults = {
 
 
 
-KeyTable.version = "2.1.0";
+KeyTable.version = "2.1.3";
 
 
 $.fn.dataTable.KeyTable = KeyTable;
@@ -826,7 +917,7 @@ $(document).on( 'preInit.dt.dtk', function (e, settings, json) {
 	var defaults = DataTable.defaults.keys;
 
 	if ( init || defaults ) {
-		var opts = $.extend( {}, init, defaults );
+		var opts = $.extend( {}, defaults, init );
 
 		if ( init !== false ) {
 			new KeyTable( settings, opts  );

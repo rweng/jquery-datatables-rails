@@ -66,7 +66,7 @@ module Jquery
             :bootstrap2 => [" *= require dataTables/bootstrap/2/jquery.dataTables.bootstrap\n"],
             :bootstrap3 => [" *= require dataTables/bootstrap/3/jquery.dataTables.bootstrap\n"],
             :foundation => [" *= require dataTables/jquery.dataTables.foundation\n"],
-            :responsive => [" *= require dataTables/extras/dataTables.responsive\n"]
+            :responsive => [" *= require dataTables/extras/responsive.dataTables\n"]
           }
         end
       end
