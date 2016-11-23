@@ -2609,7 +2609,9 @@
 			oSettings.jqXHR = $.ajax( $.extend( baseAjax, ajax ) );
 	
 			// Restore for next time around
-			ajax.data = ajaxData;
+                        if (ajax !== null) {
+			    ajax.data = ajaxData;
+                        }
 		}
 	}
 	
