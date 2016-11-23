@@ -11,3 +11,7 @@ task :fix_css do
   end
   print "Done.\n"
 end
+
+
+
+task :default => :spec

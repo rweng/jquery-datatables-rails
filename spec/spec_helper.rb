@@ -1,0 +1,1 @@
+require "jquery/datatables/rails/engine"

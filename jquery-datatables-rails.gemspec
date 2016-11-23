@@ -22,5 +22,13 @@ Gem::Specification.new do |s|
   s.add_dependency "sass-rails"
   s.add_dependency 'railties',   '>= 3.1'
   s.add_dependency 'actionpack', '>= 3.1'
+  s.add_development_dependency "rspec"
+  s.add_development_dependency "rspec-nc"
+  s.add_development_dependency "capybara"
+  s.add_development_dependency "guard"
+  s.add_development_dependency "guard-rspec"
+  s.add_development_dependency "pry"
+  s.add_development_dependency "pry-remote"
+  s.add_development_dependency "pry-nav"
   s.add_development_dependency 'rake'
 end
