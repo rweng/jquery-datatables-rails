@@ -146,7 +146,7 @@ This will add to the corresponding asset files
 
 ## Responsive Installation
 
-1 - Complete steps 1-3 of the General Installation.
+1 - Complete steps 1-2 of the General Installation.
 
 2 -  Run the install generator:
 ```bash
