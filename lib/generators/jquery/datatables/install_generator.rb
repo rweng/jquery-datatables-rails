@@ -54,7 +54,6 @@ module Jquery
               "//= require dataTables/foundation/dataTables.foundation\n"
             ],
             :responsive => [
-              "//= require dataTables/jquery.dataTables\n",
               "//= require dataTables/extras/dataTables.responsive\n"
             ]
           }
