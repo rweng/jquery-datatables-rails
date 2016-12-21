@@ -47,11 +47,11 @@ module Jquery
             ],
             :bootstrap3 => [
               "//= require dataTables/jquery.dataTables\n",
-              "//= require dataTables/bootstrap/3/jquery.dataTables.bootstrap\n"
+              "//= require dataTables/bootstrap/3/dataTables.bootstrap\n"
             ],
             :foundation => [
               "//= require dataTables/jquery.dataTables\n",
-              "//= require dataTables/jquery.dataTables.foundation\n"
+              "//= require dataTables/foundation/dataTables.foundation\n"
             ],
             :responsive => [
               "//= require dataTables/jquery.dataTables\n",
@@ -64,9 +64,9 @@ module Jquery
           {
             :regular => [" *= require dataTables/jquery.dataTables\n"],
             :bootstrap2 => [" *= require dataTables/bootstrap/2/jquery.dataTables.bootstrap\n"],
-            :bootstrap3 => [" *= require dataTables/bootstrap/3/jquery.dataTables.bootstrap\n"],
-            :foundation => [" *= require dataTables/jquery.dataTables.foundation\n"],
-            :responsive => [" *= require dataTables/extras/dataTables.responsive\n"]
+            :bootstrap3 => [" *= require dataTables/bootstrap/3/dataTables.bootstrap\n"],
+            :foundation => [" *= require dataTables/foundation/dataTables.foundation\n"],
+            :responsive => [" *= require dataTables/jquery.dataTables\n *= require dataTables/extras/dataTables/responsive.dataTables\n"]
           }
         end
       end
