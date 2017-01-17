@@ -2,7 +2,7 @@
 # jquery-datatables-rails
 [![Gem Version](https://badge.fury.io/rb/jquery-datatables-rails.svg)](http://badge.fury.io/rb/jquery-datatables-rails)
 
-This gem packages the jQuery [DataTables](http://datatables.net/) plugin for easy use with the Rails 3.1+ asset pipleine.
+This gem packages the jQuery [DataTables](http://datatables.net/) plugin for easy use with the Rails 3.1+ asset pipeline.
 It provides all the basic DataTables files, and a few of the extras.
 
 # Important
