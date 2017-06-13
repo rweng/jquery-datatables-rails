@@ -3,12 +3,12 @@ $:.push File.expand_path("../lib", __FILE__)
 require "jquery/datatables/rails/version"
 
 Gem::Specification.new do |s|
-  s.name = "jquery-datatables-rails"
+  s.name = "jquery-datatables-rails-plus"
   s.version = Jquery::Datatables::Rails::VERSION
-  s.authors = ["Robin Wenglewski"]
-  s.email = ["robin@wenglewski.de"]
-  s.homepage = "https://github.com/rweng/jquery-datatables-rails"
-  s.summary = %q{jquery datatables for rails}
+  s.authors = ["Kornraphop Kawintiranon"]
+  s.email = ["kornosk130@gmail.com "]
+  s.homepage = "https://github.com/kornosk/jquery-datatables-rails-plus"
+  s.summary = %q{jquery-datatables gem for rails, edited by kornosk for specific purpose}
   s.description = %q{}
   s.license = 'MIT'
 
