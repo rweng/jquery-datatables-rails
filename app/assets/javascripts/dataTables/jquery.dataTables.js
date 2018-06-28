@@ -4382,29 +4382,17 @@
 	 *  @memberof DataTable#oApi
 	 */
 	function _fnThrottle( fn, freq ) {
-		var
-			frequency = freq !== undefined ? freq : 200,
-			last,
-			timer;
-	
-		return function () {
-			var
-				that = this,
-				now  = +new Date(),
-				args = arguments;
-	
-			if ( last && now < last + frequency ) {
-				clearTimeout( timer );
-	
-				timer = setTimeout( function () {
-					last = undefined;
-					fn.apply( that, args );
-				}, frequency );
-			}
-			else {
-				last = now;
-				fn.apply( that, args );
-			}
+		if (freq === undefined) {
+			freq = 200;
+		}
+		var timeout;
+		return function() {
+			var context = this, args = arguments;
+			clearTimeout(timeout);
+			timeout = setTimeout(function() {
+				timeout = null;
+				fn.apply(context, args);
+			}, freq);
 		};
 	}
 	
