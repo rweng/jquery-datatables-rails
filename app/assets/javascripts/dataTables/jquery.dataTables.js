@@ -4388,7 +4388,7 @@
 		var timeout;
 		return function() {
 			var context = this, args = arguments;
-			clearTimeout(freq);
+			clearTimeout(timeout);
 			timeout = setTimeout(function() {
 				timeout = null;
 				fn.apply(context, args);
