@@ -3,7 +3,17 @@
 [![Gem Version](https://badge.fury.io/rb/jquery-datatables-rails.svg)](http://badge.fury.io/rb/jquery-datatables-rails)
 
 This gem packages the jQuery [DataTables](http://datatables.net/) plugin for easy use with the Rails 3.1+ asset pipleine.
-It provides all the basic DataTables files, and a few of the extras.
+It gathers components for datatables for rails.
+
+Datatables is a jquery javascript library for efficient rendering of tables of data fetched from a web service.
+This gem does the following:
+
+-   Includes the javascript, stylesheets, and other files from database and installs them in the rails asset pipeline.
+-   Has dependencies to collect the gems needed to use datatables with rails.
+-   Provides rails generators for datatables and datatables plugins.
+
+This repo is a fork of the official gem repo.
+
 
 # Important
 
@@ -15,15 +25,16 @@ If you encounter any errors, please fork the repository, update the plugin files
 
 ## Upgrade Notes
 
-1 - For people upgrading to 3.x.x who are using the responsive extension.
-Due to an error displaying the plus icon in a recent version of this gem, the responsive code has now changed and uses the DataTables responsive extension instead. This requires some changes to your responsive configuration. See the Responsive Installation section below and follow the link.
+### From rweng/jquery-datatables-rails gem
+
+This version requires no changes to migrate from the `rweng/jquery-datatables-rails` version `3.4.0` gem
 
 ## General Installation
 
 1 - Add to your Gemfile:
 
 ```ruby
-gem 'jquery-datatables-rails', '~> 3.4.0'
+gem 'jquery-datatables-rails', '~> 3.5.0', :github => 'marlinpierce/jquery-datatables-rails', :branch => 'master-3.5'
 ```
 
 2 - Install the gem:
